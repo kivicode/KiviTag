@@ -1,9 +1,9 @@
 //
 //  ViewController.swift
-//  OpenCVSample_iOS
+//  KiviTag
 //
-//  Created by Hiroki Ishiura on 2015/08/12.
-//  Copyright (c) 2015年 Hiroki Ishiura. All rights reserved.
+//  Created by Hiroki Ishiura on 2019/08/08.
+//  Copyright (c) 2019 KoviCpde. All rights reserved.
 //
 
 import UIKit
@@ -167,76 +167,35 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 		let capturedImage = UIImage(ciImage: image)
 		CVPixelBufferUnlockBaseAddress(buffer, CVPixelBufferLockFlags.readOnly)
 		
-		// This is a filtering sample.
         let resultImage = OpenCV.process(capturedImage)
-        
-//        resultImage = OpenCV.getNumbers()
         
         if(OpenCV.shouldCheck() == 1 && detect){
             let num = OpenCV.numberOfDigits()
             var outp = ""
             if(num > 0) {
-//                DispatchQueue.main.sync(execute: {
-//                    self.label.text = ""
-//                })
                 for i in 0..<min(num, 5) {
                     let numbers = OpenCV.getNumberImage(Int32(i))
                     outp += classify(inp: numbers)
-                    
-                }
-                if(outp != onTest){
-                    testCounter += 1
-                } else {
-                    testCounter = 0
-                }
-                if(testCounter >= 4) {
-                    onTest = outp
-                    testCounter = 0
-                    DispatchQueue.main.sync(execute: {
-                        self.label.text = String(outp)
-                    })
                 }
             }
-//            if(frameCounter == 4) {
-//                DispatchQueue.main.sync(execute: {
-//                    self.label.text = ""
-//                })
-//                for i in 0..<dataBuffer[0][0] {
-//                    let data = mostFreq(index: i)
-//
-//                }
-//                for i in 1..<5 {
-//                    dataBuffer[i] = Array(repeating: 0, count: 6)
-//                }
-//            }
-//            frameCounter += 1
-//            frameCounter %= 5
-//            DispatchQueue.main.sync(execute: {
-//                self.digitsView.image = numbers
-//            })
-    }
-//        resultImage = OpenCV.sobelFilter(resultImage)
-
-		// Show the result.
-		DispatchQueue.main.async(execute: {
-			self.imageView.image = resultImage
-		})
+            if(outp != onTest){
+                testCounter += 1
+            } else {
+                testCounter = 0
+            }
+            if(testCounter >= 4) {
+                onTest = outp
+                testCounter = 0
+                DispatchQueue.main.sync(execute: {
+                    self.label.text = String(outp)
+                })
+            }
+        }
+        // Show the result.
+        DispatchQueue.main.async(execute: {
+            self.imageView.image = resultImage
+        })
 	}
-    
-//    func mostFreq(index: Int) -> Int {
-//        var output: Int = -1
-//        var data = Array(repeating: 0, count: 10)
-//        for i in 1...5 {
-//            let inp = dataBuffer[i][index]
-//            if(inp != -1){
-//                data[inp] += 1
-//            }
-//        }
-//        let maxScore = data.max()
-//        output = data.filter{maxScore == $0}[0]
-//
-//        return output
-//    }
     
     func classify(inp: UIImage) -> String{
         guard let imageArray = scanImage(img: inp) else { return ""}
@@ -244,11 +203,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         // Perform classification
         do {
             let output = try neuralNet.infer(imageArray)
-            if let (label, confidence) = label(from: output) {
+            if let (label, _) = label(from: output) {
                 DispatchQueue.main.async(execute: {
                     self.digitsView.image = inp
                 })
-//                displayOutputLabel(label: label, confidence: confidence)
                 return String(label)
             } else {
                 return "Err"
