@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  KiviTag
 //
-//  Created by Hiroki Ishiura on 2019/08/08.
-//  Copyright (c) 2019 KoviCpde. All rights reserved.
+//  Created by KiviCode on 2019/08/08.
+//  Copyright (c) 2019 KiviCode. All rights reserved.
 //
 
 import UIKit
@@ -16,11 +16,24 @@ extension String {
     }
 }
 
+struct defaultsKeys {
+    static let settingsFrom = "settingsFrom"
+    static let settingsTo   = "settingsTo"
+}
+
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+    
+    let rates = [
+        "EUR": 1.0,
+        "RUB": 73.82,
+        "PL": 4.36325
+    ]
     
     var neuralNet: NeuralNet!
     
     var onTest: String = ""
+    
+    var goal = "F"
     
     var testCounter: Int = 0
     
@@ -37,6 +50,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     var detect = !false
     
+    var once = false
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
         
@@ -52,6 +67,17 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         let tap = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         tap.numberOfTapsRequired = 2
         view.addGestureRecognizer(tap)
+        
+        
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
+        
+        leftSwipe.direction = .left
+        rightSwipe.direction = .right
+        
+        view.addGestureRecognizer(leftSwipe)
+        view.addGestureRecognizer(rightSwipe)
+        
         
 		// Prepare a video capturing session.
 		self.session = AVCaptureSession()
@@ -186,8 +212,22 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             if(testCounter >= 4) {
                 onTest = outp
                 testCounter = 0
+                
                 DispatchQueue.main.sync(execute: {
-                    self.label.text = String(outp)
+                    let defaults = UserDefaults.standard
+
+                    var frm = "EUR"
+                    var t  = "EUR"
+                    if let from = defaults.string(forKey: defaultsKeys.settingsFrom) {
+                        frm = from
+                    }
+                    if let to = defaults.string(forKey: defaultsKeys.settingsTo) {
+                        t = to
+                    }
+                    var cnv = (((Float(outp) ?? 0) / 100) / Float(rates[frm] ?? 0) * Float(rates[t] ?? 0))
+                    cnv = Float(round(100 * cnv) / 100)
+                    let reg = Float(round(Float(outp) ?? 0) / 100)
+                    self.label.text = String(reg) + "[" + frm + "] -> " + String(cnv) + "[" + t + "]"
                 })
             }
         }
@@ -222,10 +262,18 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         return (output.firstIndex(of: max)!, max)
     }
     
-    
-    
     @objc func doubleTapped() {
         detect = !detect
+    }
+    
+    var swapRight = true
+    
+    @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
+        
+        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "Settings") as! SettingsViewController
+        newViewController.modalTransitionStyle = .flipHorizontal
+        self.present(newViewController, animated: true, completion: nil)
     }
 }
 

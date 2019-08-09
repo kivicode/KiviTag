@@ -24,6 +24,7 @@
 		ACAEB8D022FCCE9A00C83C55 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C922FCCE9A00C83C55 /* Cache.swift */; };
 		ACAEB8D122FCCE9A00C83C55 /* Activation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8CA22FCCE9A00C83C55 /* Activation.swift */; };
 		ACAEB8D222FCCE9A00C83C55 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8CB22FCCE9A00C83C55 /* Error.swift */; };
+		ACD3E93122FE0830009B2073 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3E93022FE0830009B2073 /* SettingsViewController.swift */; };
 		ACFC11F822FCDF7700E49FE5 /* neuralnet-mnist-trained in Resources */ = {isa = PBXBuildFile; fileRef = ACFC11F722FCDF7700E49FE5 /* neuralnet-mnist-trained */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 		ACAEB8CA22FCCE9A00C83C55 /* Activation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activation.swift; sourceTree = "<group>"; };
 		ACAEB8CB22FCCE9A00C83C55 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		ACD3C39A22FB54D5006393EE /* TesseractOCR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TesseractOCR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACD3E93022FE0830009B2073 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ACFC11F722FCDF7700E49FE5 /* neuralnet-mnist-trained */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "neuralnet-mnist-trained"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,6 +118,7 @@
 				ACAEB8C722FCCE9900C83C55 /* Structure.swift */,
 				31A6B5D21B7ADB70003C88EA /* AppDelegate.swift */,
 				31A6B5D41B7ADB70003C88EA /* ViewController.swift */,
+				ACD3E93022FE0830009B2073 /* SettingsViewController.swift */,
 				31A6B5F61B7ADEF4003C88EA /* KiviTag-Bridging-Header.h */,
 				31A6B5FB1B7ADFAE003C88EA /* OpenCV.h */,
 				31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */,
@@ -285,6 +288,7 @@
 			files = (
 				31A6B5D51B7ADB70003C88EA /* ViewController.swift in Sources */,
 				31A6B5FD1B7ADFAE003C88EA /* OpenCV.mm in Sources */,
+				ACD3E93122FE0830009B2073 /* SettingsViewController.swift in Sources */,
 				ACAEB8D022FCCE9A00C83C55 /* Cache.swift in Sources */,
 				ACAEB8CC22FCCE9A00C83C55 /* Dataset.swift in Sources */,
 				31A6B5D31B7ADB70003C88EA /* AppDelegate.swift in Sources */,
