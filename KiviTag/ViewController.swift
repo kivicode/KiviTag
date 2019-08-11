@@ -193,7 +193,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 		let capturedImage = UIImage(ciImage: image)
 		CVPixelBufferUnlockBaseAddress(buffer, CVPixelBufferLockFlags.readOnly)
 		
-        let resultImage = OpenCV.process(capturedImage)
+        var resultImage = OpenCV.processEink(capturedImage)
+        
+        if(OpenCV.shouldCheck() == 1 && detect){
+//            resultImage = OpenCV.process(resultImage, false)
+            DispatchQueue.main.async(execute: {
+                self.digitsView.image = OpenCV.getNumberImage(0);
+            })
+        }
+        
+        ///*
         
         if(OpenCV.shouldCheck() == 1 && detect){
             let num = OpenCV.numberOfDigits()
@@ -201,7 +210,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             if(num > 0) {
                 for i in 0..<min(num, 5) {
                     let numbers = OpenCV.getNumberImage(Int32(i))
-                    outp += classify(inp: numbers)
+                    outp = classify(inp: numbers) + outp;
                 }
             }
             if(outp != onTest){
@@ -209,7 +218,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             } else {
                 testCounter = 0
             }
-            if(testCounter >= 4) {
+            if(testCounter >= 1) {
                 onTest = outp
                 testCounter = 0
                 
@@ -231,6 +240,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 })
             }
         }
+         //*/
         // Show the result.
         DispatchQueue.main.async(execute: {
             self.imageView.image = resultImage

@@ -120,7 +120,7 @@ static UIImage *RestoreUIImageOrientation(UIImage *processed, UIImage *original)
 bool compareContour(std::vector<cv::Point> contour1, std::vector<cv::Point> contour2) {
     int i = boundingRect(contour1).x;
     int j = boundingRect(contour2).x;
-    return i < j ;
+    return i > j ;
 }
 
 bool compareContourArea(std::vector<cv::Point> contour1, std::vector<cv::Point> contour2) {
@@ -153,21 +153,27 @@ std::vector<cv::Scalar> colors {{
 }};
 
 + (nonnull UIImage *)getNumberImage: (int)number {
-    UIImage *res_image = MatToUIImage(outputs[number]);
-    CGImageRef rawImageRef=res_image.CGImage;
-    const CGFloat colorMasking[6] = {222, 255, 222, 255, 222, 255};
-    UIGraphicsBeginImageContext(res_image.size);
-    CGImageRef maskedImageRef=CGImageCreateWithMaskingColors(rawImageRef, colorMasking);
-    {
-        //if in iphone
-        CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0, res_image.size.height);
-        CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, -1.0);
+    try {
+        UIImage *res_image = MatToUIImage(outputs[number]);
+        CGImageRef rawImageRef=res_image.CGImage;
+        const CGFloat colorMasking[6] = {222, 255, 222, 255, 222, 255};
+        UIGraphicsBeginImageContext(res_image.size);
+        CGImageRef maskedImageRef=CGImageCreateWithMaskingColors(rawImageRef, colorMasking);
+        {
+            //if in iphone
+            CGContextTranslateCTM(UIGraphicsGetCurrentContext(), 0.0, res_image.size.height);
+            CGContextScaleCTM(UIGraphicsGetCurrentContext(), 1.0, -1.0);
+        }
+        CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, res_image.size.width, res_image.size.height), maskedImageRef);
+        UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
+        CGImageRelease(maskedImageRef);
+        UIGraphicsEndImageContext();
+        return result;
+    } catch(Exception e) {
+        Mat outp(10, 10, CV_8U, Scalar(0));
+        return MatToUIImage(outp);
     }
-    CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, res_image.size.width, res_image.size.height), maskedImageRef);
-    UIImage *result = UIGraphicsGetImageFromCurrentImageContext();
-    CGImageRelease(maskedImageRef);
-    UIGraphicsEndImageContext();
-    return result;
+    
 }
 
 +(UIImage *)changeWhiteColorTransparent: (UIImage *)image {
@@ -186,13 +192,24 @@ std::vector<cv::Scalar> colors {{
     return result;
 }
 
-+(nonnull UIImage *)process:(UIImage *)image {
+static Mat normalizeSobel(Mat grad){
+    double min, max;
+    minMaxLoc(grad, &min, &max);
+    
+    for(int j = 0; j < grad.rows; j++) {
+        for (int i = 0; i < grad.cols; i++) {
+            auto val = grad.at<uchar>(j,i);
+            grad.at<uchar>(j,i) = (uchar)(255 * ((val - min) / (max - min)));
+        }
+    }
+    return grad;
+}
+
++(nonnull UIImage *)processEink:(UIImage *)image {
     outputs.clear();
     check = 0;
     len = 0;
     
-    Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(13, 13));
-
     Mat input, output;
     UIImageToMat(image, input);
     input.copyTo(output);
@@ -209,62 +226,254 @@ std::vector<cv::Scalar> colors {{
     
     Mat cropped = Mat(input, roi);
     
-    Mat gray;
-    cvtColor(cropped, gray, COLOR_BGR2GRAY);
+    Mat gray, grad, display = input;
     
-    Mat grad;
-
-    GaussianBlur(gray, gray, cv::Size(3, 3), 0);
-    Mat krn = getStructuringElement(MORPH_RECT, cv::Size(3, 3));
-    erode(gray, gray, krn);
+    cvtColor(cropped, gray, COLOR_BGR2GRAY);
+    bilateralFilter(gray, grad, 11, 17, 17);
+    Canny(grad, grad, 30, 200);
+    
+    std::vector<cv::Mat> contours;
+    findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+    
+    int maxArea = 0;
+    cvtColor(grad, grad, COLOR_GRAY2BGR);
+    
+    if(contours.size() > 0){
+        Mat biggest = contours[0];
+        for(int i = 0; i < contours.size(); i++){
+            cv::Rect box = boundingRect(contours[i]);
+            float area = box.width * box.height;
+            float asp = (float)box.height / (float)box.width;
+            if((asp >= 0.3 && asp <= 0.6) || (asp >= 0.87 && asp <= 1.2)){
+                if(area >= maxArea){
+                    maxArea = area;
+                    biggest = contours[i];
+                }
+            }
+        }
+        check = 1;
+        cv::Rect box = boundingRect(biggest);
+        display = Mat(cropped, box);
+        resize(display, display, cv::Size(300, 150));
+//        roi = box;
+        outputs.clear();
+        outputs.push_back(display);
+        rectangle(cropped, cv::Point(box.x+1, box.y+1), cv::Point(box.x+box.width-1, box.y+box.height-1), cv::Scalar(0, 255, 0), 2);
+    }
+    
+    /********/
+    cvtColor(display, gray, COLOR_BGR2GRAY);
+    medianBlur(gray, gray, 3);
+    Mat krn = getStructuringElement(MORPH_RECT, cv::Size(3, 2));
+    Mat krn2 = getStructuringElement(MORPH_RECT, cv::Size(3, 2));
+    erode(gray, gray, krn2);
     dilate(gray, gray, krn);
-    Canny(gray, grad, 50, 200);
+    Canny(gray, grad, 30, 200);
     
     Mat mask(grad.rows, grad.cols, CV_8U, Scalar(0));
+    cropped = display;
     bool edited = false;
-
-    std::vector<std::vector<cv::Point>> contours;
+    bool shouldCrop = true;
+    
+    contours.clear();
     findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
     std::sort(contours.begin(), contours.end(), compareContourArea);
     std::sort(contours.begin(), contours.end(), compareContour);
+    
+    int n = 0;
+    Mat first(0, 0, CV_8U);
+    cv::Rect firstBox(0,0,0,0);
+    for(int i = 0; i < contours.size(); i++){
+        auto cnt = contours[i];
+        cv::Rect box = boundingRect(cnt);
+        auto area = box.width * box.height;
+        if(area > (shouldCrop ? 400 : 1000) && n <= 6){
+            float aspectRatio = (float)box.width / (float)box.height;
+            if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
+                int dst = dist(cv::Point(box.x+(int)(box.width / 2), box.y+(int)(box.height / 2)), cv::Point(firstBox.x+(int)(firstBox.width / 2), firstBox.y+(int)(firstBox.height / 2)));
+                if(checkConnections(cnt, contours, 2) && (first.rows == 0 || dst <= 100)){
+                    if(first.rows == 0){
+                        first = cnt;
+                        firstBox = boundingRect(first);
+                    }
+                    
+                    Mat normal = Mat(cropped, box);
+                    resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
+                    
+                    cvtColor(normal, normal, COLOR_BGR2GRAY);
+                    GaussianBlur(normal, normal, cv::Size(5, 5), 0);
+                    threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
+                    //                area = normal.rows * normal.cols;
+                    //                float beforeErode = (float)countNonZero(normal);
+                    //                erode(normal, normal, getStructuringElement(MORPH_RECT, cv::Size(5, 5)));
+                    //                float afterErode = (float)countNonZero(normal);
+                    //                int delta = (int)(100 * (float)(beforeErode - afterErode) / (float)area);
+                    
+                    //                if(delta >= 40){
+                    
+                    int additionalPart = (28 - normal.cols) / 2;
+                    Mat delim(28, additionalPart, CV_8U, Scalar(255));
+                    hconcat(normal, delim, normal);
+                    hconcat(delim, normal, normal);
+                    
+                    outputs.push_back(normal);
+                    
+                    rectangle(display, cv::Point(box.x, box.y), cv::Point(box.width+box.x, box.height+box.y), colors[n]);
+                    
+                    putText(display, std::to_string((int)(dst)), cv::Point(box.x, box.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
+                    edited = true;
+                    n++;
+                    len++;
+                }
+            }
+        }
+    }
+//    cvtColor(grad, grad, COLOR_GRAY2BGR);
+//    rectangle(display, cv::Point(box.x, box.y), cv::Point(box.width+box.x, box.height+box.y), colors[n]);
+    Mat insert(input, roi);
+//    display.copyTo(insert);
+    rectangle(input, crop_from, crop_to, cv::Scalar(0, 255, 0), 1);
+    if(edited) {
+        onlyNumbers = mask;
+        check = 1;
+    }
+    
+    return MatToUIImage(input);
+}
 
+float dist(cv::Point a, cv::Point b){
+    return std::sqrt(pow((a.x-b.x), 2) + pow((a.y-b.y), 2));
+}
+
+bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest = 1) {
+    cv::Rect box = boundingRect(suspect);
+    cv::Point origCenter(box.x+(int)(box.width / 2), box.y+(int)(box.height / 2));
+    int radius = 2 * max(box.width, box.height) * 1.5;
+    int counter = 0;
+    if(allContours.size()-1 < minNearest){
+        return false;
+    }
+    for(int i = 0; i < allContours.size(); i++){
+        auto cnt = allContours[i];
+        cv::Rect curBox = boundingRect(cnt);
+        cv::Point center(curBox.x+(int)(curBox.width / 2), curBox.y+(int)(curBox.height / 2));
+        if(dist(center, origCenter) <= radius){
+            counter++;
+        }
+    }
+    return counter >= minNearest;
+}
+
+
++(nonnull UIImage *)process: (UIImage *)image: (bool)shouldCrop {
+//    outputs.clear();
+    check = 0;
+    len = 0;
+    
+    Mat kernel = getStructuringElement(MORPH_RECT, cv::Size(13, 13));
+    
+    Mat input, output, orig;
+    UIImageToMat(image, input);
+    orig = input;
+
+    
+    input.copyTo(output);
+    
+    int size[] = {300, 150};
+    int oldSize[] = {0, 0};
+    oldSize[0] = size[0];
+    oldSize[1] = size[1];
+    
+    int w  = input.cols;
+    int h = input.rows;
+    
+    cv::Point crop_from = cv::Point((int)(w/2 - size[0]/2), (int)(h/2 - size[1]/2));
+    cv::Point crop_to   = cv::Point((int)(w/2 + size[0]/2), (int)(h/2 + size[1]/2));
+    
+    cv::Rect roi = cv::Rect(crop_from.x, crop_from.y, crop_to.x-crop_from.x, crop_to.y-crop_from.y);
+    
+    Mat cropped = Mat(input, roi), origCropped = Mat(input, roi);
+    
+    if(!shouldCrop){
+        input = outputs[0];
+        cropped = input;
+    }
+    outputs.clear();
+    
+    Mat gray;
+    cvtColor(cropped, gray, COLOR_BGR2GRAY);
+    
+    Mat grad;
+    
+    medianBlur(gray, gray, 3);
+    Mat krn = getStructuringElement(MORPH_RECT, cv::Size(2, 1));
+    Mat krn2 = getStructuringElement(MORPH_RECT, cv::Size(3, 1));
+    dilate(gray, gray, krn);
+    erode(gray, gray, krn2);
+    Canny(gray, grad, 30, 200);
+    
+    Mat mask(grad.rows, grad.cols, CV_8U, Scalar(0));
+    bool edited = false;
+    
+    std::vector<Mat> contours;
+    findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+    
+    input = orig;
+    cropped = origCropped;
+    
+    std::sort(contours.begin(), contours.end(), compareContourArea);
+    std::sort(contours.begin(), contours.end(), compareContour);
+    
     int n = 0;
     for(int i = 0; i < contours.size(); i++){
         auto cnt = contours[i];
         cv::Rect box = boundingRect(cnt);
         auto area = box.width * box.height;
-        if(area > 1000 && n <= 3){
+        if(area > (shouldCrop ? 300 : 1000) && n <= 6){
             float aspectRatio = (float)box.width / (float)box.height;
             if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
+                if(checkConnections(cnt, contours, 2)){
                 Mat normal = Mat(cropped, box);
                 resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
 
                 cvtColor(normal, normal, COLOR_BGR2GRAY);
                 GaussianBlur(normal, normal, cv::Size(5, 5), 0);
                 threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
-                
-                int additionalPart = (28 - normal.cols) / 2;
-                Mat delim(28, additionalPart, CV_8U, Scalar(255));
-                hconcat(normal, delim, normal);
-                hconcat(delim, normal, normal);
-                
-                outputs.push_back(normal);
-                
-                rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
-                edited = true;
-                n++;
-                len++;
+//                area = normal.rows * normal.cols;
+//                float beforeErode = (float)countNonZero(normal);
+//                erode(normal, normal, getStructuringElement(MORPH_RECT, cv::Size(5, 5)));
+//                float afterErode = (float)countNonZero(normal);
+//                int delta = (int)(100 * (float)(beforeErode - afterErode) / (float)area);
+
+//                if(delta >= 40){
+
+                    int additionalPart = (28 - normal.cols) / 2;
+                    Mat delim(28, additionalPart, CV_8U, Scalar(255));
+                    hconcat(normal, delim, normal);
+                    hconcat(delim, normal, normal);
+
+                    outputs.push_back(normal);
+
+                    rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
+                    putText(input, std::to_string((int)(area)), cv::Point(box.x+roi.x, box.y+roi.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
+                    edited = true;
+                    n++;
+                    len++;
+                }
             }
         }
     }
-    
+    cvtColor(grad, grad, COLOR_GRAY2BGR);
+    drawContours(grad, contours, -1, cv::Scalar(0, 255, 127), -1);
+    Mat insert(input, roi);
+//    grad.copyTo(insert);
     rectangle(input, crop_from, crop_to, cv::Scalar(0, 255, 0), 1);
     if(edited) {
         onlyNumbers = mask;
         check = 1;
     }
-
+    
     return MatToUIImage(input);
 }
 

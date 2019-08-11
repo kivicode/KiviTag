@@ -12,7 +12,8 @@
 
 + (nonnull UIImage *)cvtColorBGR2GRAY:(nonnull UIImage *)image;
 + (nonnull UIImage *)getNumberImage: (int)number;
-+ (nonnull UIImage *)process:(UIImage *_Nonnull)image;
++ (nonnull UIImage *)process:(UIImage *_Nonnull)image: (bool)shouldCrop;
++ (nonnull UIImage *)processEink:(UIImage *_Nonnull)image;
 + (int)shouldCheck;
 + (int)numberOfDigits;
 @end
