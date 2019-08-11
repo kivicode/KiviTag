@@ -37,15 +37,14 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     var fromVal = ""
     var toVal = ""
     
-    
-    //    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String {
-    //        return pickerData[component][row]
-    //    }
-    
     @IBOutlet weak var from: UIPickerView!
     
     @IBOutlet weak var to: UIPickerView!
     
+    @IBOutlet weak var selector: UISegmentedControl!
+    @IBAction func typeSelect(_ sender: Any) {
+        UserDefaults.standard.set(selector.selectedSegmentIndex == 1, forKey: defaultsKeys.settingsInk)
+    }
     var pickerData: [[String]] = [[String]]()
     
     override func viewDidLoad() {
@@ -57,8 +56,13 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         pickerData = [["RUB", "EUR", "PL"],
                       ["RUB", "EUR", "PL"]]
         
-        fromVal = pickerData[0][0]
-        toVal = pickerData[1][0]
+        let defaults = UserDefaults.standard
+        let fromRow = defaultsKeys.ratesDef[defaults.string(forKey: defaultsKeys.settingsFrom) ?? "EUR"] ?? 0
+        let toRow = defaultsKeys.ratesDef[defaults.string(forKey: defaultsKeys.settingsTo) ?? "EUR"] ?? 0
+        let selectorVal = UserDefaults.standard.bool(forKey: defaultsKeys.settingsInk) ? 1 : 0
+        selector.selectedSegmentIndex = selectorVal
+        fromVal = pickerData[0][fromRow]
+        toVal = pickerData[1][toRow]
         
         let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
@@ -68,6 +72,9 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         
         view.addGestureRecognizer(leftSwipe)
         view.addGestureRecognizer(rightSwipe)
+        
+        self.from?.selectRow(fromRow, inComponent: 0, animated: true)
+        self.to?.selectRow(toRow, inComponent: 0, animated: true)
         
     }
     

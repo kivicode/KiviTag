@@ -24,6 +24,7 @@
 		ACAEB8D022FCCE9A00C83C55 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C922FCCE9A00C83C55 /* Cache.swift */; };
 		ACAEB8D122FCCE9A00C83C55 /* Activation.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8CA22FCCE9A00C83C55 /* Activation.swift */; };
 		ACAEB8D222FCCE9A00C83C55 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8CB22FCCE9A00C83C55 /* Error.swift */; };
+		ACCBBF222300354600375E10 /* rect.png in Resources */ = {isa = PBXBuildFile; fileRef = ACCBBF212300354500375E10 /* rect.png */; };
 		ACD3E93122FE0830009B2073 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3E93022FE0830009B2073 /* SettingsViewController.swift */; };
 		ACFC11F822FCDF7700E49FE5 /* neuralnet-mnist-trained in Resources */ = {isa = PBXBuildFile; fileRef = ACFC11F722FCDF7700E49FE5 /* neuralnet-mnist-trained */; };
 /* End PBXBuildFile section */
@@ -60,6 +61,7 @@
 		ACAEB8C922FCCE9A00C83C55 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		ACAEB8CA22FCCE9A00C83C55 /* Activation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activation.swift; sourceTree = "<group>"; };
 		ACAEB8CB22FCCE9A00C83C55 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		ACCBBF212300354500375E10 /* rect.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rect.png; sourceTree = "<group>"; };
 		ACD3C39A22FB54D5006393EE /* TesseractOCR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TesseractOCR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACD3E93022FE0830009B2073 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ACFC11F722FCDF7700E49FE5 /* neuralnet-mnist-trained */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "neuralnet-mnist-trained"; sourceTree = "<group>"; };
@@ -109,6 +111,7 @@
 		31A6B5CF1B7ADB70003C88EA /* KiviTag */ = {
 			isa = PBXGroup;
 			children = (
+				ACCBBF212300354500375E10 /* rect.png */,
 				ACAEB8CA22FCCE9A00C83C55 /* Activation.swift */,
 				ACAEB8C922FCCE9A00C83C55 /* Cache.swift */,
 				ACAEB8C522FCCE9900C83C55 /* Dataset.swift */,
@@ -266,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				31A6B5D81B7ADB70003C88EA /* Main.storyboard in Resources */,
+				ACCBBF222300354600375E10 /* rect.png in Resources */,
 				ACFC11F822FCDF7700E49FE5 /* neuralnet-mnist-trained in Resources */,
 				31A6B5DD1B7ADB70003C88EA /* LaunchScreen.xib in Resources */,
 				31A6B5DA1B7ADB70003C88EA /* Images.xcassets in Resources */,

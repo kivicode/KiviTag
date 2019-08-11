@@ -19,6 +19,8 @@ extension String {
 struct defaultsKeys {
     static let settingsFrom = "settingsFrom"
     static let settingsTo   = "settingsTo"
+    static let settingsInk  = "settingsInk"
+    static let ratesDef     = ["EUR": 0, "RUB": 1, "PL": 2]
 }
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -33,7 +35,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     var onTest: String = ""
     
-    var goal = "F"
+    var goal = "[Fail]"
     
     var testCounter: Int = 0
     
@@ -182,7 +184,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     }
 	
 	func captureOutput(_ captureOutput: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-		
+        let useEINK = UserDefaults.standard.bool(forKey: defaultsKeys.settingsInk)
 		// Convert a captured image buffer to UIImage.
 		guard let buffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
 			print("could not get a pixel buffer")
@@ -193,14 +195,14 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 		let capturedImage = UIImage(ciImage: image)
 		CVPixelBufferUnlockBaseAddress(buffer, CVPixelBufferLockFlags.readOnly)
 		
-        var resultImage = OpenCV.processEink(capturedImage)
+        let resultImage = useEINK ? OpenCV.processEink(capturedImage) : OpenCV.process(capturedImage)
         
-        if(OpenCV.shouldCheck() == 1 && detect){
-//            resultImage = OpenCV.process(resultImage, false)
-            DispatchQueue.main.async(execute: {
-                self.digitsView.image = OpenCV.getNumberImage(0);
-            })
-        }
+//        if(OpenCV.shouldCheck() == 1 && detect){
+////            resultImage = OpenCV.process(resultImage, false)
+//            DispatchQueue.main.async(execute: {
+//                self.digitsView.image = OpenCV.getNumberImage(0);
+//            })
+//        }
         
         ///*
         
@@ -218,7 +220,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             } else {
                 testCounter = 0
             }
-            if(testCounter >= 1) {
+            if(testCounter >= 7) {
                 onTest = outp
                 testCounter = 0
                 
@@ -236,7 +238,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     var cnv = (((Float(outp) ?? 0) / 100) / Float(rates[frm] ?? 0) * Float(rates[t] ?? 0))
                     cnv = Float(round(100 * cnv) / 100)
                     let reg = Float(round(Float(outp) ?? 0) / 100)
-                    self.label.text = String(reg) + "[" + frm + "] -> " + String(cnv) + "[" + t + "]"
+                    self.label.text = "{\(useEINK ? "E-Ink" : "Reg")} \(reg) [\(frm)] -> \(cnv) [\(t)]"
                 })
             }
         }

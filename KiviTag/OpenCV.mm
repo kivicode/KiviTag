@@ -276,6 +276,7 @@ static Mat normalizeSobel(Mat grad){
     bool shouldCrop = true;
     
     contours.clear();
+    outputs.clear();
     findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
 
     std::sort(contours.begin(), contours.end(), compareContourArea);
@@ -366,7 +367,7 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
 }
 
 
-+(nonnull UIImage *)process: (UIImage *)image: (bool)shouldCrop {
++(nonnull UIImage *)process: (UIImage *)image {
 //    outputs.clear();
     check = 0;
     len = 0;
@@ -395,10 +396,6 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
     
     Mat cropped = Mat(input, roi), origCropped = Mat(input, roi);
     
-    if(!shouldCrop){
-        input = outputs[0];
-        cropped = input;
-    }
     outputs.clear();
     
     Mat gray;
@@ -430,7 +427,7 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
         auto cnt = contours[i];
         cv::Rect box = boundingRect(cnt);
         auto area = box.width * box.height;
-        if(area > (shouldCrop ? 300 : 1000) && n <= 6){
+        if(area > 1000 && n <= 6){
             float aspectRatio = (float)box.width / (float)box.height;
             if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
                 if(checkConnections(cnt, contours, 2)){
@@ -440,26 +437,19 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
                 cvtColor(normal, normal, COLOR_BGR2GRAY);
                 GaussianBlur(normal, normal, cv::Size(5, 5), 0);
                 threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
-//                area = normal.rows * normal.cols;
-//                float beforeErode = (float)countNonZero(normal);
-//                erode(normal, normal, getStructuringElement(MORPH_RECT, cv::Size(5, 5)));
-//                float afterErode = (float)countNonZero(normal);
-//                int delta = (int)(100 * (float)(beforeErode - afterErode) / (float)area);
+                    
+                int additionalPart = (28 - normal.cols) / 2;
+                Mat delim(28, additionalPart, CV_8U, Scalar(255));
+                hconcat(normal, delim, normal);
+                hconcat(delim, normal, normal);
 
-//                if(delta >= 40){
+                outputs.push_back(normal);
 
-                    int additionalPart = (28 - normal.cols) / 2;
-                    Mat delim(28, additionalPart, CV_8U, Scalar(255));
-                    hconcat(normal, delim, normal);
-                    hconcat(delim, normal, normal);
-
-                    outputs.push_back(normal);
-
-                    rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
-                    putText(input, std::to_string((int)(area)), cv::Point(box.x+roi.x, box.y+roi.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
-                    edited = true;
-                    n++;
-                    len++;
+                rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
+                putText(input, std::to_string((int)(area)), cv::Point(box.x+roi.x, box.y+roi.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
+                edited = true;
+                n++;
+                len++;
                 }
             }
         }
