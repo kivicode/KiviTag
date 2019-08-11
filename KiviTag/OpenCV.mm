@@ -1,8 +1,8 @@
 //
 //  OpenCV.m
-//  OpenCVSample_iOS
+//  KiviTag
 //
-//  Created by Hiroki Ishiura on 2019/08/12.
+//  Created by KiviCode on 2019/08/08.
 //  Copyright (c) 2019 KiviCode. All rights reserved.
 //
 
@@ -227,6 +227,7 @@ static Mat normalizeSobel(Mat grad){
     Mat cropped = Mat(input, roi);
     
     Mat gray, grad, display = input;
+    cv::Rect displayBox(0,0,0,0);
     
     cvtColor(cropped, gray, COLOR_BGR2GRAY);
     bilateralFilter(gray, grad, 11, 17, 17);
@@ -255,9 +256,10 @@ static Mat normalizeSobel(Mat grad){
         cv::Rect box = boundingRect(biggest);
         display = Mat(cropped, box);
         resize(display, display, cv::Size(300, 150));
-//        roi = box;
         outputs.clear();
         outputs.push_back(display);
+//        approxPolyDP(biggest, biggest, 0.1*arcLength(biggest, true), true);
+//        drawContours(input, biggest, 0, cv::Scalar(0, 0, 255));
         rectangle(cropped, cv::Point(box.x+1, box.y+1), cv::Point(box.x+box.width-1, box.y+box.height-1), cv::Scalar(0, 255, 0), 2);
     }
     
@@ -319,10 +321,6 @@ static Mat normalizeSobel(Mat grad){
                     hconcat(delim, normal, normal);
                     
                     outputs.push_back(normal);
-                    
-                    rectangle(display, cv::Point(box.x, box.y), cv::Point(box.width+box.x, box.height+box.y), colors[n]);
-                    
-                    putText(display, std::to_string((int)(dst)), cv::Point(box.x, box.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
                     edited = true;
                     n++;
                     len++;
@@ -330,10 +328,7 @@ static Mat normalizeSobel(Mat grad){
             }
         }
     }
-//    cvtColor(grad, grad, COLOR_GRAY2BGR);
-//    rectangle(display, cv::Point(box.x, box.y), cv::Point(box.width+box.x, box.height+box.y), colors[n]);
-    Mat insert(input, roi);
-//    display.copyTo(insert);
+
     rectangle(input, crop_from, crop_to, cv::Scalar(0, 255, 0), 1);
     if(edited) {
         onlyNumbers = mask;
@@ -446,7 +441,7 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
                 outputs.push_back(normal);
 
                 rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
-                putText(input, std::to_string((int)(area)), cv::Point(box.x+roi.x, box.y+roi.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
+//                putText(input, std::to_string((int)(area)), cv::Point(box.x+roi.x, box.y+roi.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
                 edited = true;
                 n++;
                 len++;
@@ -456,9 +451,8 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
     }
     cvtColor(grad, grad, COLOR_GRAY2BGR);
     drawContours(grad, contours, -1, cv::Scalar(0, 255, 127), -1);
-    Mat insert(input, roi);
-//    grad.copyTo(insert);
-    rectangle(input, crop_from, crop_to, cv::Scalar(0, 255, 0), 1);
+
+    rectangle(input, crop_from, crop_to, cv::Scalar(0, 0, 255), 1);
     if(edited) {
         onlyNumbers = mask;
         check = 1;

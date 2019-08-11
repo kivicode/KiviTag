@@ -2,9 +2,10 @@
 //  SettingsViewController.swift
 //  Kivi Tag
 //
-//  Created by KiviCode on 09/08/2019.
+//  Created by KiviCode on 2019/08/08.
 //  Copyright © 2019 KiviCode. All rights reserved.
 //
+
 
 import Foundation
 
@@ -73,8 +74,8 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         view.addGestureRecognizer(leftSwipe)
         view.addGestureRecognizer(rightSwipe)
         
-        self.from?.selectRow(fromRow, inComponent: 0, animated: true)
-        self.to?.selectRow(toRow, inComponent: 0, animated: true)
+        self.from?.selectRow(toRow, inComponent: 0, animated: true)
+        self.to?.selectRow(fromRow, inComponent: 0, animated: true)
         
     }
     

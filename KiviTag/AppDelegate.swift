@@ -1,9 +1,9 @@
 //
 //  AppDelegate.swift
-//  OpenCVSample_iOS
+//  KiviTag
 //
-//  Created by Hiroki Ishiura on 2015/08/12.
-//  Copyright (c) 2015年 Hiroki Ishiura. All rights reserved.
+//  Created by KiviCode on 2019/08/08.
+//  Copyright (c) 2019 KiviCode. All rights reserved.
 //
 
 import UIKit

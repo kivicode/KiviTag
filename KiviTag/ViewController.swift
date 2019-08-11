@@ -238,7 +238,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     var cnv = (((Float(outp) ?? 0) / 100) / Float(rates[frm] ?? 0) * Float(rates[t] ?? 0))
                     cnv = Float(round(100 * cnv) / 100)
                     let reg = Float(round(Float(outp) ?? 0) / 100)
-                    self.label.text = "{\(useEINK ? "E-Ink" : "Reg")} \(reg) [\(frm)] -> \(cnv) [\(t)]"
+//                    self.label.text = "{\(useEINK ? "E-Ink" : "Reg")} \(reg) [\(frm)] -> \(cnv) [\(t)]"
+                    self.label.text = "\(reg)[\(frm)] -> \(cnv)[\(t)]"
                 })
             }
         }
@@ -282,10 +283,10 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
         
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "Settings") as! SettingsViewController
-        newViewController.modalTransitionStyle = .flipHorizontal
-        self.present(newViewController, animated: true, completion: nil)
+//        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//        let newViewController = storyBoard.instantiateViewController(withIdentifier: "Settings") as! SettingsViewController
+//        newViewController.modalTransitionStyle = .flipHorizontal
+//        self.present(newViewController, animated: true, completion: nil)
     }
 }
 

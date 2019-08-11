@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class OpenCVSample_iOSTests: XCTestCase {
+class KiviTagTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
