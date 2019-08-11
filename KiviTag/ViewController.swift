@@ -20,12 +20,15 @@ struct defaultsKeys {
     static let settingsFrom = "settingsFrom"
     static let settingsTo   = "settingsTo"
     static let settingsInk  = "settingsInk"
-    static let ratesDef     = ["EUR": 0, "RUB": 1, "PL": 2]
+    static let settingsRateList  = "settingsRateList"
+    static let settingsRateDict  = "settingsRateDict"
+    static var ratesDef: [String]     = []
+    static var rates: [String: Double] = [:]
 }
 
 class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    let rates = [
+    var rates = [
         "EUR": 1.0,
         "RUB": 73.82,
         "PL": 4.36325
@@ -56,6 +59,11 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        
+        let defaults = UserDefaults.standard
+        defaultsKeys.rates = (defaults.dictionary(forKey: defaultsKeys.settingsRateDict) ?? [:]) as! [String: Double]
+        defaultsKeys.ratesDef = (defaults.array(forKey: defaultsKeys.settingsRateList) ?? []) as! [String]
+        request()
         
         do {
             guard let url = Bundle.main.url(forResource: "neuralnet-mnist-trained", withExtension: nil) else {
@@ -235,7 +243,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     if let to = defaults.string(forKey: defaultsKeys.settingsTo) {
                         t = to
                     }
-                    var cnv = (((Float(outp) ?? 0) / 100) / Float(rates[frm] ?? 0) * Float(rates[t] ?? 0))
+                    var cnv = (((Float(outp) ?? 0) / 100) / Float(rates[frm] ?? 1) * Float(rates[t] ?? 1))
                     cnv = Float(round(100 * cnv) / 100)
                     let reg = Float(round(Float(outp) ?? 0) / 100)
 //                    self.label.text = "{\(useEINK ? "E-Ink" : "Reg")} \(reg) [\(frm)] -> \(cnv) [\(t)]"
@@ -287,6 +295,36 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 //        let newViewController = storyBoard.instantiateViewController(withIdentifier: "Settings") as! SettingsViewController
 //        newViewController.modalTransitionStyle = .flipHorizontal
 //        self.present(newViewController, animated: true, completion: nil)
+        request()
+    }
+    
+    func request(){
+        let url = URL(string: "https://api.exchangeratesapi.io/latest")!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            guard let data = data, error == nil else {
+                print(error?.localizedDescription ?? "No data")
+                return
+            }
+            let responseJSON = try? JSONSerialization.jsonObject(with: data, options: [])
+            if let responseJSON = responseJSON as? [String: Any] {
+                var ratesList = Array((responseJSON["rates"] as! [String: Double]).keys)
+                ratesList.append("EUR")
+                ratesList = ratesList.sorted(by: <)
+                print(ratesList)
+                defaultsKeys.rates = responseJSON["rates"] as! [String: Double]
+                defaultsKeys.rates["EUR"] = Double(1)
+                self.rates = defaultsKeys.rates
+                defaultsKeys.ratesDef = ratesList
+                let defaults = UserDefaults.standard
+                defaults.set(defaultsKeys.rates, forKey: defaultsKeys.settingsRateDict)
+                defaults.set(defaultsKeys.ratesDef, forKey: defaultsKeys.settingsRateList)
+            }
+        }
+        
+        task.resume()
     }
 }
 

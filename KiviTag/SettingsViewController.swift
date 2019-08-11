@@ -33,6 +33,7 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         let defaults = UserDefaults.standard
         defaults.set(fromVal, forKey: defaultsKeys.settingsFrom)
         defaults.set(toVal, forKey: defaultsKeys.settingsTo)
+
     }
     
     var fromVal = ""
@@ -46,7 +47,7 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     @IBAction func typeSelect(_ sender: Any) {
         UserDefaults.standard.set(selector.selectedSegmentIndex == 1, forKey: defaultsKeys.settingsInk)
     }
-    var pickerData: [[String]] = [[String]]()
+    var pickerData: [[String]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,16 +55,21 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         self.from.dataSource = self
         self.to.delegate = self
         self.to.dataSource = self
-        pickerData = [["RUB", "EUR", "PL"],
-                      ["RUB", "EUR", "PL"]]
+        pickerData = [defaultsKeys.ratesDef,
+                      defaultsKeys.ratesDef]
         
         let defaults = UserDefaults.standard
-        let fromRow = defaultsKeys.ratesDef[defaults.string(forKey: defaultsKeys.settingsFrom) ?? "EUR"] ?? 0
-        let toRow = defaultsKeys.ratesDef[defaults.string(forKey: defaultsKeys.settingsTo) ?? "EUR"] ?? 0
+//        var fromRow = defaultsKeys.rates[defaults.string(forKey: defaultsKeys.settingsFrom) ?? "RUB"]
+//        var toRow   = defaultsKeys.rates[defaults.string(forKey: defaultsKeys.settingsTo)   ?? "RUB"]
+        
+        let fromRow = defaultsKeys.ratesDef.firstIndex(of: defaults.string(forKey: defaultsKeys.settingsFrom) ?? "RUB") ?? 0
+        let toRow   = defaultsKeys.ratesDef.firstIndex(of: defaults.string(forKey: defaultsKeys.settingsTo)   ?? "RUB") ?? 0
+        
         let selectorVal = UserDefaults.standard.bool(forKey: defaultsKeys.settingsInk) ? 1 : 0
         selector.selectedSegmentIndex = selectorVal
-        fromVal = pickerData[0][fromRow]
-        toVal = pickerData[1][toRow]
+        print(defaultsKeys.ratesDef)
+        fromVal = defaults.string(forKey: defaultsKeys.settingsFrom) ?? "RUB"
+        toVal   = defaults.string(forKey: defaultsKeys.settingsTo)   ?? "RUB"
         
         let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
         let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
@@ -74,8 +80,8 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
         view.addGestureRecognizer(leftSwipe)
         view.addGestureRecognizer(rightSwipe)
         
-        self.from?.selectRow(toRow, inComponent: 0, animated: true)
-        self.to?.selectRow(fromRow, inComponent: 0, animated: true)
+        self.from?.selectRow(fromRow, inComponent: 0, animated: true)
+        self.to?.selectRow(toRow, inComponent: 0, animated: true)
         
     }
     
