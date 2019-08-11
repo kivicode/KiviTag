@@ -256,9 +256,9 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         do {
             let output = try neuralNet.infer(imageArray)
             if let (label, _) = label(from: output) {
-                DispatchQueue.main.async(execute: {
-                    self.digitsView.image = inp
-                })
+//                DispatchQueue.main.async(execute: {
+//                    self.digitsView.image = inp
+//                })
                 return String(label)
             } else {
                 return "Err"
