@@ -258,12 +258,9 @@ static Mat normalizeSobel(Mat grad){
         resize(display, display, cv::Size(300, 150));
         outputs.clear();
         outputs.push_back(display);
-//        approxPolyDP(biggest, biggest, 0.1*arcLength(biggest, true), true);
-//        drawContours(input, biggest, 0, cv::Scalar(0, 0, 255));
         rectangle(cropped, cv::Point(box.x+1, box.y+1), cv::Point(box.x+box.width-1, box.y+box.height-1), cv::Scalar(0, 255, 0), 2);
     }
     
-    /********/
     cvtColor(display, gray, COLOR_BGR2GRAY);
     medianBlur(gray, gray, 3);
     Mat krn = getStructuringElement(MORPH_RECT, cv::Size(3, 2));
@@ -307,14 +304,6 @@ static Mat normalizeSobel(Mat grad){
                     cvtColor(normal, normal, COLOR_BGR2GRAY);
                     GaussianBlur(normal, normal, cv::Size(5, 5), 0);
                     threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
-                    //                area = normal.rows * normal.cols;
-                    //                float beforeErode = (float)countNonZero(normal);
-                    //                erode(normal, normal, getStructuringElement(MORPH_RECT, cv::Size(5, 5)));
-                    //                float afterErode = (float)countNonZero(normal);
-                    //                int delta = (int)(100 * (float)(beforeErode - afterErode) / (float)area);
-                    
-                    //                if(delta >= 40){
-                    
                     int additionalPart = (28 - normal.cols) / 2;
                     Mat delim(28, additionalPart, CV_8U, Scalar(255));
                     hconcat(normal, delim, normal);
@@ -363,7 +352,7 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
 
 
 +(nonnull UIImage *)process: (UIImage *)image {
-//    outputs.clear();
+    outputs.clear();
     check = 0;
     len = 0;
     
@@ -441,7 +430,6 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
                 outputs.push_back(normal);
 
                 rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
-//                putText(input, std::to_string((int)(area)), cv::Point(box.x+roi.x, box.y+roi.y), FONT_HERSHEY_PLAIN, 1, cv::Scalar(100, 0, 255));
                 edited = true;
                 n++;
                 len++;

@@ -290,11 +290,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var swapRight = true
     
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
-        
-//        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        let newViewController = storyBoard.instantiateViewController(withIdentifier: "Settings") as! SettingsViewController
-//        newViewController.modalTransitionStyle = .flipHorizontal
-//        self.present(newViewController, animated: true, completion: nil)
         request()
     }
     
@@ -313,7 +308,6 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                 var ratesList = Array((responseJSON["rates"] as! [String: Double]).keys)
                 ratesList.append("EUR")
                 ratesList = ratesList.sorted(by: <)
-                print(ratesList)
                 defaultsKeys.rates = responseJSON["rates"] as! [String: Double]
                 defaultsKeys.rates["EUR"] = Double(1)
                 self.rates = defaultsKeys.rates

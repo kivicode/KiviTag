@@ -59,8 +59,6 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
                       defaultsKeys.ratesDef]
         
         let defaults = UserDefaults.standard
-//        var fromRow = defaultsKeys.rates[defaults.string(forKey: defaultsKeys.settingsFrom) ?? "RUB"]
-//        var toRow   = defaultsKeys.rates[defaults.string(forKey: defaultsKeys.settingsTo)   ?? "RUB"]
         
         let fromRow = defaultsKeys.ratesDef.firstIndex(of: defaults.string(forKey: defaultsKeys.settingsFrom) ?? "RUB") ?? 0
         let toRow   = defaultsKeys.ratesDef.firstIndex(of: defaults.string(forKey: defaultsKeys.settingsTo)   ?? "RUB") ?? 0
@@ -86,11 +84,7 @@ class SettingsViewController: UIViewController, UIPickerViewDelegate, UIPickerVi
     }
     
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
-        
-        let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "Camera") as! ViewController
-        newViewController.modalTransitionStyle = .flipHorizontal
-        self.present(newViewController, animated: true, completion: nil)
+        ViewController().request()
     }
 }
 
