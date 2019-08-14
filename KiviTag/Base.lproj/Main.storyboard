@@ -734,7 +734,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    Tip: You can change scanning area side ration between rectangle(2/1) and sqare(1/1) by long swipe near the area" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rc7-C6-ZXd">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="    Tip: You can change scanning area side ration between rectangle(2/1) and square(1/1) by long swipe near the area" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rc7-C6-ZXd">
                                 <rect key="frame" x="16" y="210" width="288" height="61"/>
                                 <color key="backgroundColor" red="0.93681186439999997" green="0.93313121799999998" blue="0.92576217650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -942,15 +942,6 @@ I specialize in programming of microcontrollers and computer vision. I prefer to
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A few words about me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rLS-eB-TfY">
-                                <rect key="frame" x="75" y="72" width="182" height="21"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="21" id="dEG-IV-PBl"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My e-mail: kivicode.dev@gmail.com" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8l-v3-BsJ">
                                 <rect key="frame" x="16" y="469" width="275" height="21"/>
                                 <constraints>
@@ -975,6 +966,15 @@ I specialize in programming of microcontrollers and computer vision. I prefer to
                                     <constraint firstAttribute="height" constant="21" id="iKM-OQ-mHo"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A few words about me" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rLS-eB-TfY">
+                                <rect key="frame" x="75" y="72" width="182" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="21" id="dEG-IV-PBl"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
