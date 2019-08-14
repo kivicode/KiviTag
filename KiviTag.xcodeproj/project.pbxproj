@@ -17,6 +17,7 @@
 		31A6B5F41B7ADBA4003C88EA /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31A6B5F21B7ADBA4003C88EA /* opencv2.framework */; };
 		31A6B5FD1B7ADFAE003C88EA /* OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */; };
 		AC161FEB23046AFB00CE8F12 /* images in Resources */ = {isa = PBXBuildFile; fileRef = AC161FEA23046AFA00CE8F12 /* images */; };
+		AC161FED2304A03C00CE8F12 /* ReportsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC161FEC2304A03C00CE8F12 /* ReportsViewController.swift */; };
 		ACAEB8CC22FCCE9A00C83C55 /* Dataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C522FCCE9900C83C55 /* Dataset.swift */; };
 		ACAEB8CD22FCCE9A00C83C55 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C622FCCE9900C83C55 /* Storage.swift */; };
 		ACAEB8CE22FCCE9A00C83C55 /* Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C722FCCE9900C83C55 /* Structure.swift */; };
@@ -55,6 +56,7 @@
 		31A6B5FB1B7ADFAE003C88EA /* OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCV.h; sourceTree = "<group>"; };
 		31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCV.mm; sourceTree = "<group>"; };
 		AC161FEA23046AFA00CE8F12 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
+		AC161FEC2304A03C00CE8F12 /* ReportsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewController.swift; sourceTree = "<group>"; };
 		ACAEB8C522FCCE9900C83C55 /* Dataset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dataset.swift; sourceTree = "<group>"; };
 		ACAEB8C622FCCE9900C83C55 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		ACAEB8C722FCCE9900C83C55 /* Structure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structure.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				31A6B5D41B7ADB70003C88EA /* ViewController.swift */,
 				ACD3E93022FE0830009B2073 /* SettingsViewController.swift */,
 				ACFF4F5E2303525F004B0EC6 /* CalculatorViewController.swift */,
+				AC161FEC2304A03C00CE8F12 /* ReportsViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -323,6 +326,7 @@
 				ACAEB8CD22FCCE9A00C83C55 /* Storage.swift in Sources */,
 				ACAEB8CE22FCCE9A00C83C55 /* Structure.swift in Sources */,
 				ACAEB8D122FCCE9A00C83C55 /* Activation.swift in Sources */,
+				AC161FED2304A03C00CE8F12 /* ReportsViewController.swift in Sources */,
 				ACAEB8D222FCCE9A00C83C55 /* Error.swift in Sources */,
 				ACFF4F5F2303525F004B0EC6 /* CalculatorViewController.swift in Sources */,
 				ACAEB8CF22FCCE9A00C83C55 /* NeuralNet.swift in Sources */,
