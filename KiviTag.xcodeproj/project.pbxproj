@@ -18,6 +18,7 @@
 		31A6B5FD1B7ADFAE003C88EA /* OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */; };
 		AC161FEB23046AFB00CE8F12 /* images in Resources */ = {isa = PBXBuildFile; fileRef = AC161FEA23046AFA00CE8F12 /* images */; };
 		AC161FED2304A03C00CE8F12 /* ReportsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC161FEC2304A03C00CE8F12 /* ReportsViewController.swift */; };
+		AC50B2022304BAD600DC6820 /* SRCopyableLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC50B2012304BAD600DC6820 /* SRCopyableLabel.swift */; };
 		ACAEB8CC22FCCE9A00C83C55 /* Dataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C522FCCE9900C83C55 /* Dataset.swift */; };
 		ACAEB8CD22FCCE9A00C83C55 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C622FCCE9900C83C55 /* Storage.swift */; };
 		ACAEB8CE22FCCE9A00C83C55 /* Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C722FCCE9900C83C55 /* Structure.swift */; };
@@ -57,6 +58,7 @@
 		31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCV.mm; sourceTree = "<group>"; };
 		AC161FEA23046AFA00CE8F12 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		AC161FEC2304A03C00CE8F12 /* ReportsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewController.swift; sourceTree = "<group>"; };
+		AC50B2012304BAD600DC6820 /* SRCopyableLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRCopyableLabel.swift; sourceTree = "<group>"; };
 		ACAEB8C522FCCE9900C83C55 /* Dataset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dataset.swift; sourceTree = "<group>"; };
 		ACAEB8C622FCCE9900C83C55 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		ACAEB8C722FCCE9900C83C55 /* Structure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structure.swift; sourceTree = "<group>"; };
@@ -113,11 +115,11 @@
 		31A6B5CF1B7ADB70003C88EA /* KiviTag */ = {
 			isa = PBXGroup;
 			children = (
+				AC50B2002304BABB00DC6820 /* Swift Helpers */,
 				ACFF4F5D23035235004B0EC6 /* View Controllers */,
 				ACFF4F5C2303520F004B0EC6 /* Storyboards */,
 				ACFF4F5B230351E1004B0EC6 /* Open CV */,
 				ACFF4F5A230351CA004B0EC6 /* NN */,
-				31A6B5D21B7ADB70003C88EA /* AppDelegate.swift */,
 				31A6B5D91B7ADB70003C88EA /* Images.xcassets */,
 				31A6B5D01B7ADB70003C88EA /* Supporting Files */,
 			);
@@ -155,6 +157,15 @@
 				31A6B5F21B7ADBA4003C88EA /* opencv2.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AC50B2002304BABB00DC6820 /* Swift Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				AC50B2012304BAD600DC6820 /* SRCopyableLabel.swift */,
+				31A6B5D21B7ADB70003C88EA /* AppDelegate.swift */,
+			);
+			name = "Swift Helpers";
 			sourceTree = "<group>";
 		};
 		ACAEB8D422FCCF6200C83C55 /* MNIST */ = {
@@ -321,6 +332,7 @@
 				31A6B5FD1B7ADFAE003C88EA /* OpenCV.mm in Sources */,
 				ACD3E93122FE0830009B2073 /* SettingsViewController.swift in Sources */,
 				ACAEB8D022FCCE9A00C83C55 /* Cache.swift in Sources */,
+				AC50B2022304BAD600DC6820 /* SRCopyableLabel.swift in Sources */,
 				ACAEB8CC22FCCE9A00C83C55 /* Dataset.swift in Sources */,
 				31A6B5D31B7ADB70003C88EA /* AppDelegate.swift in Sources */,
 				ACAEB8CD22FCCE9A00C83C55 /* Storage.swift in Sources */,
