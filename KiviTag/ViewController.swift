@@ -161,7 +161,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
             t = to
         }
         if let mem: Float = UserDefaults.standard.float(forKey: defaultsKeys.settingsCalcMemory) {
-                SumLabel.text = "Sum: \(mem) \(t)"
+                SumLabel.text = "Sum: \(Float(round(100 * mem) / 100)) \(t)"
         }
     }
 	

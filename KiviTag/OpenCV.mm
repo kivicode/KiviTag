@@ -303,30 +303,23 @@ static Mat normalizeSobel(Mat grad){
             if(area > (shouldCrop ? 400 : 1000) && n <= 6){
                 float aspectRatio = (float)box.width / (float)box.height;
                 if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
-                    int dst = dist(cv::Point(box.x+(int)(box.width / 2), box.y+(int)(box.height / 2)), cv::Point(firstBox.x+(int)(firstBox.width / 2), firstBox.y+(int)(firstBox.height / 2)));
-    //                if(checkConnections(cnt, contours, 2) && (first.rows == 0 || dst <= 100)){
-    //                    if(first.rows == 0){
-    //                        first = cnt;
-    //                        firstBox = boundingRect(first);
-    //                    }
-                    
-                        Mat normal = Mat(cropped, box);
-                        resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
-                    
-                        cvtColor(normal, normal, COLOR_BGR2GRAY);
-                        GaussianBlur(normal, normal, cv::Size(5, 5), 0);
-                        threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
-                        int additionalPart = (28 - normal.cols) / 2;
-                        Mat delim(28, additionalPart, CV_8U, Scalar(255));
-                        hconcat(normal, delim, normal);
-                        hconcat(delim, normal, normal);
-                    
-    //                    rectangle(display, cv::Point(box.x, box.y), cv::Point(box.x+box.width, box.y+box.height), colors[n]);
+                    Mat normal = Mat(cropped, box);
+                    resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
+                
+                    cvtColor(normal, normal, COLOR_BGR2GRAY);
+                    GaussianBlur(normal, normal, cv::Size(5, 5), 0);
+                    threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
+                    int additionalPart = (28 - normal.cols) / 2;
+                    Mat delim(28, additionalPart, CV_8U, Scalar(255));
+                    hconcat(normal, delim, normal);
+                    hconcat(delim, normal, normal);
+                
+//                    rectangle(display, cv::Point(box.x, box.y), cv::Point(box.x+box.width, box.y+box.height), colors[n]);
                     drawContours(display, cnt, -1, cv::Scalar(0, 255, 255), 2);
-                        outputs.push_back(normal);
-                        edited = true;
-                        n++;
-                        len++;
+                    outputs.push_back(normal);
+                    edited = true;
+                    n++;
+                    len++;
     //                }
                 }
             }
@@ -338,14 +331,29 @@ static Mat normalizeSobel(Mat grad){
             check = 1;
         }
     }
-//    Mat insert(input, roi);
-//    display.copyTo(insert);
+    
+    input = blurUnused(input, roi);
     
     return MatToUIImage(input);
 }
 
 float dist(cv::Point a, cv::Point b){
     return std::sqrt(pow((a.x-b.x), 2) + pow((a.y-b.y), 2));
+}
+
+Mat blurUnused(Mat orig, cv::Rect roi) {
+    for(int j = 0; j < orig.rows; j++) {
+        for (int i = 0; i < orig.cols; i++) {
+            if(i < roi.x || i > roi.x + roi.width || j < roi.y || j > roi.y + roi.height){
+                Vec3b val = orig.at<Vec3b>(cv::Point(i,j));
+                val[0] /= 4;
+                val[1] /= 4;
+                val[2] /= 4;
+                orig.at<Vec3b>(cv::Point(i,j)) = val;
+            }
+        }
+    }
+    return orig;
 }
 
 bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest = 1) {
@@ -458,6 +466,8 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
             check = 1;
         }
     }
+    
+    input = blurUnused(input, roi);
     
     return MatToUIImage(input);
 }
