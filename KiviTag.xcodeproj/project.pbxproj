@@ -16,6 +16,7 @@
 		31A6B5F31B7ADBA4003C88EA /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31A6B5F21B7ADBA4003C88EA /* opencv2.framework */; };
 		31A6B5F41B7ADBA4003C88EA /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31A6B5F21B7ADBA4003C88EA /* opencv2.framework */; };
 		31A6B5FD1B7ADFAE003C88EA /* OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */; };
+		AC161FEB23046AFB00CE8F12 /* images in Resources */ = {isa = PBXBuildFile; fileRef = AC161FEA23046AFA00CE8F12 /* images */; };
 		ACAEB8CC22FCCE9A00C83C55 /* Dataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C522FCCE9900C83C55 /* Dataset.swift */; };
 		ACAEB8CD22FCCE9A00C83C55 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C622FCCE9900C83C55 /* Storage.swift */; };
 		ACAEB8CE22FCCE9A00C83C55 /* Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C722FCCE9900C83C55 /* Structure.swift */; };
@@ -53,6 +54,7 @@
 		31A6B5F61B7ADEF4003C88EA /* KiviTag-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "KiviTag-Bridging-Header.h"; sourceTree = "<group>"; };
 		31A6B5FB1B7ADFAE003C88EA /* OpenCV.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenCV.h; sourceTree = "<group>"; };
 		31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OpenCV.mm; sourceTree = "<group>"; };
+		AC161FEA23046AFA00CE8F12 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		ACAEB8C522FCCE9900C83C55 /* Dataset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Dataset.swift; sourceTree = "<group>"; };
 		ACAEB8C622FCCE9900C83C55 /* Storage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		ACAEB8C722FCCE9900C83C55 /* Structure.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Structure.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 		31A6B5C41B7ADB70003C88EA = {
 			isa = PBXGroup;
 			children = (
+				AC161FEA23046AFA00CE8F12 /* images */,
 				ACAEB8D422FCCF6200C83C55 /* MNIST */,
 				31A6B5CF1B7ADB70003C88EA /* KiviTag */,
 				31A6B5E51B7ADB70003C88EA /* KiviTagTests */,
@@ -289,6 +292,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC161FEB23046AFB00CE8F12 /* images in Resources */,
 				31A6B5D81B7ADB70003C88EA /* Main.storyboard in Resources */,
 				ACFC11F822FCDF7700E49FE5 /* neuralnet-mnist-trained in Resources */,
 				31A6B5DD1B7ADB70003C88EA /* LaunchScreen.xib in Resources */,

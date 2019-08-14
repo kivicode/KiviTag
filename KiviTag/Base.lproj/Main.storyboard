@@ -555,7 +555,7 @@
         <!--InfoScan-->
         <scene sceneID="fbV-dB-xde">
             <objects>
-                <viewController title="InfoScan" id="etN-Wa-N5V" sceneMemberID="viewController">
+                <viewController title="InfoScan" modalPresentationStyle="currentContext" id="etN-Wa-N5V" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="HLD-sg-qHG"/>
                         <viewControllerLayoutGuide type="bottom" id="jHs-7f-ZD9"/>
@@ -563,13 +563,62 @@
                     <view key="view" contentMode="scaleToFill" id="sTg-eH-NQj">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="How to scan price tags" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FeN-e3-Kpv">
+                                <rect key="frame" x="38" y="85" width="245" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="TzW-1V-Jhu"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="19"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place the price tag in the scan area and wait about 1/5 second. Then the price will appear at the top of the label." lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" preferredMaxLayoutWidth="1503" translatesAutoresizingMaskIntoConstraints="NO" id="29F-fB-BEf">
+                                <rect key="frame" x="16" y="139" width="288" height="63"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="63" id="iXs-Mr-RLf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" Note: sometimes the data may be wrong, but the program quickly corrects XD" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rc7-C6-ZXd">
+                                <rect key="frame" x="16" y="210" width="288" height="61"/>
+                                <color key="backgroundColor" red="0.93681186439999997" green="0.93313121799999998" blue="0.92576217650000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="61" id="29P-vc-n1w"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tutorial_scan_1" translatesAutoresizingMaskIntoConstraints="NO" id="o5x-mx-ce1">
+                                <rect key="frame" x="16" y="288" width="288" height="260"/>
+                            </imageView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="rc7-C6-ZXd" firstAttribute="top" secondItem="29F-fB-BEf" secondAttribute="bottom" constant="8" symbolic="YES" id="3DL-pg-Cb9"/>
+                            <constraint firstItem="29F-fB-BEf" firstAttribute="leading" secondItem="sTg-eH-NQj" secondAttribute="leadingMargin" id="4u6-4L-afg"/>
+                            <constraint firstItem="29F-fB-BEf" firstAttribute="top" secondItem="FeN-e3-Kpv" secondAttribute="bottom" constant="24" id="Eby-Wm-GnL"/>
+                            <constraint firstAttribute="bottom" secondItem="o5x-mx-ce1" secondAttribute="bottom" constant="20" symbolic="YES" id="IAe-ik-NNN"/>
+                            <constraint firstItem="29F-fB-BEf" firstAttribute="trailing" secondItem="sTg-eH-NQj" secondAttribute="trailingMargin" id="WPK-NM-NQG"/>
+                            <constraint firstItem="rc7-C6-ZXd" firstAttribute="trailing" secondItem="o5x-mx-ce1" secondAttribute="trailing" id="bAe-gc-UHO"/>
+                            <constraint firstItem="29F-fB-BEf" firstAttribute="leading" secondItem="rc7-C6-ZXd" secondAttribute="leading" id="giV-8l-4f4"/>
+                            <constraint firstItem="FeN-e3-Kpv" firstAttribute="top" secondItem="HLD-sg-qHG" secondAttribute="bottom" constant="21" id="hUA-kr-uid"/>
+                            <constraint firstItem="29F-fB-BEf" firstAttribute="trailing" secondItem="rc7-C6-ZXd" secondAttribute="trailing" id="l0U-Yc-pkS"/>
+                            <constraint firstItem="rc7-C6-ZXd" firstAttribute="leading" secondItem="o5x-mx-ce1" secondAttribute="leading" id="pen-nU-XxO"/>
+                            <constraint firstItem="FeN-e3-Kpv" firstAttribute="centerX" secondItem="29F-fB-BEf" secondAttribute="centerX" id="prv-Kn-Q7r"/>
+                            <constraint firstItem="o5x-mx-ce1" firstAttribute="top" secondItem="rc7-C6-ZXd" secondAttribute="bottom" constant="17" id="uEo-vE-X0p"/>
+                            <constraint firstItem="FeN-e3-Kpv" firstAttribute="leading" secondItem="sTg-eH-NQj" secondAttribute="leadingMargin" constant="22" id="zgq-Om-Wfm"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Scanning" id="KGI-lU-sGU"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ux4-Td-eOt" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3681" y="-125"/>
+            <point key="canvasLocation" x="3680.625" y="-125.70422535211267"/>
         </scene>
         <!--InfoTags-->
         <scene sceneID="OhJ-wU-C5y">
@@ -913,4 +962,7 @@
             <point key="canvasLocation" x="5060.625" y="-2403.1690140845071"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tutorial_scan_1" width="640" height="1136"/>
+    </resources>
 </document>
