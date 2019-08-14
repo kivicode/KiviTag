@@ -1013,16 +1013,17 @@ I specialize in programming of microcontrollers and computer vision. I prefer to
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="https://paypal.me/kivicode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxC-dg-vrG" customClass="SRCopyableLabel" customModule="KiviTag" customModuleProvider="target">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="https://paypal.me/kivicode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uxC-dg-vrG" customClass="SRCopyableLabel" customModule="KiviTag" customModuleProvider="target">
                                 <rect key="frame" x="59" y="354" width="203" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VxY-fR-ld3">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VxY-fR-ld3">
                                 <rect key="frame" x="16" y="110" width="288" height="140"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="140" id="ePV-b7-gKa"/>
+                                </constraints>
                                 <string key="text">    So, if you liked this app or you just want to support me, you can send me money via PayPal using this link. It motivates me to create more cool projects XD</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="21"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1030,6 +1031,14 @@ I specialize in programming of microcontrollers and computer vision. I prefer to
                             </label>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="uxC-dg-vrG" firstAttribute="leading" secondItem="mXu-D9-NLE" secondAttribute="leadingMargin" constant="43" id="Cgm-0v-mFe"/>
+                            <constraint firstItem="s8J-xr-Pfq" firstAttribute="top" secondItem="uxC-dg-vrG" secondAttribute="bottom" constant="193" id="Hgb-OI-n0K"/>
+                            <constraint firstItem="VxY-fR-ld3" firstAttribute="trailing" secondItem="mXu-D9-NLE" secondAttribute="trailingMargin" id="euD-NO-rqS"/>
+                            <constraint firstItem="VxY-fR-ld3" firstAttribute="leading" secondItem="mXu-D9-NLE" secondAttribute="leadingMargin" id="lG0-CW-9kv"/>
+                            <constraint firstItem="VxY-fR-ld3" firstAttribute="centerX" secondItem="uxC-dg-vrG" secondAttribute="centerX" id="vVE-il-JHd"/>
+                            <constraint firstItem="VxY-fR-ld3" firstAttribute="top" secondItem="z0R-An-uaT" secondAttribute="bottom" constant="46" id="wGQ-us-klf"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Buy Me A Beer" id="9sQ-RU-Tvx"/>
                 </viewController>
