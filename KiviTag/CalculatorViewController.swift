@@ -20,17 +20,7 @@ class CalculatorViewController: UIViewController {
     var mem: Float = 0.0
     
     @IBAction func pressed(_ sender: UIButton) {
-        
-        var frm = "EUR"
-        var t  = "EUR"
         let defaults = UserDefaults.standard
-        if let from = defaults.string(forKey: defaultsKeys.settingsFrom) {
-            frm = from
-        }
-        if let to = defaults.string(forKey: defaultsKeys.settingsTo) {
-            t = to
-        }
-        
         if sender.tag <= 10 {
             if baseLabel.text == "0" {
                 baseLabel.text = ""
@@ -56,13 +46,7 @@ class CalculatorViewController: UIViewController {
             }
         }
         
-        
-        var txt = baseLabel.text ?? "0"
-        txt = txt.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)
-        let toBase = (Float(txt) ?? 0) / Float(defaultsKeys.rates[frm] ?? 1)
-        var cnv: Float = toBase * Float(defaultsKeys.rates[t] ?? 1)
-        cnv = Float(round(100 * cnv) / 100)
-        goalLabel.text = String(cnv)
+        let t = updateFields()
         
         if sender.tag == 14 {
             mem += Float(goalLabel.text ?? "0") ?? 0.0
@@ -72,10 +56,46 @@ class CalculatorViewController: UIViewController {
             mem = 0
             memory.text = "0 \(t)"
         }
+        
+        defaults.set(baseLabel.text ?? "0", forKey: defaultsKeys.settingsCalcBase)
+        defaults.set(mem, forKey: defaultsKeys.settingsCalcMemory)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let defaults = UserDefaults.standard
+        if let from = defaults.string(forKey: defaultsKeys.settingsCalcBase) {
+            baseLabel.text = from
+        }
+        let memory = defaults.float(forKey: defaultsKeys.settingsCalcMemory)
+        mem = memory
+        
+        let _ = updateFields()
+    }
+    
+    func updateFields() -> String{
+        
+        var frm = "EUR"
+        var t  = "EUR"
+        let defaults = UserDefaults.standard
+        if let from = defaults.string(forKey: defaultsKeys.settingsFrom) {
+            frm = from
+        }
+        if let to = defaults.string(forKey: defaultsKeys.settingsTo) {
+            t = to
+        }
+        
+        toLabel.text = t
+        fromLabel.text = frm
+        
+        var txt = baseLabel.text ?? "0"
+        txt = txt.replacingOccurrences(of: ",", with: ".", options: .literal, range: nil)
+        let toBase = (Float(txt) ?? 0) / Float(defaultsKeys.rates[frm] ?? 1)
+        var cnv: Float = toBase * Float(defaultsKeys.rates[t] ?? 1)
+        cnv = Float(round(100 * cnv) / 100)
+        goalLabel.text = String(cnv)
+        memory.text = "\(mem) \(t)"
+        return t
     }
     
 }

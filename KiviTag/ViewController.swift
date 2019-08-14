@@ -22,6 +22,9 @@ struct defaultsKeys {
     static let settingsInk  = "settingsInk"
     static let settingsRateList  = "settingsRateList"
     static let settingsRateDict  = "settingsRateDict"
+    static let settingsCalcMemory  = "settingsCalcMemory"
+    static let settingsCalcBase  = "settingsCalcBase"
+    
     static var ratesDef: [String]     = []
     static var rates: [String: Double] = [:]
 }
@@ -33,6 +36,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         "RUB": 73.82,
         "PL": 4.36325
     ]
+    
+    var converted: Float = 0.0
     
     var neuralNet: NeuralNet!
     
@@ -63,7 +68,20 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     var roiW: Int = 300
     var roiH: Int = 150
     
-	override func viewDidLoad() {
+    @IBOutlet weak var SumLabel: UILabel!
+    
+    @IBAction func ClearMemory(_ sender: Any) {
+        let defaults = UserDefaults.standard
+        defaults.set(Float(0.0), forKey: defaultsKeys.settingsCalcMemory)
+        updateMemory()
+    }
+    
+    @IBAction func PlusToMemory(_ sender: Any) {
+        let defaults = UserDefaults.standard
+        defaults.set((UserDefaults.standard.float(forKey: defaultsKeys.settingsCalcMemory) ) + Float(converted), forKey: defaultsKeys.settingsCalcMemory)
+        updateMemory()
+    }
+    override func viewDidLoad() {
 		super.viewDidLoad()
         
         
@@ -71,6 +89,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         defaultsKeys.rates = (defaults.dictionary(forKey: defaultsKeys.settingsRateDict) ?? [:]) as! [String: Double]
         defaultsKeys.ratesDef = (defaults.array(forKey: defaultsKeys.settingsRateList) ?? []) as! [String]
         request()
+        
+        updateMemory()
         
         do {
             guard let url = Bundle.main.url(forResource: "neuralnet-mnist-trained", withExtension: nil) else {
@@ -125,6 +145,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 		do {
 			try self.device.lockForConfiguration()
 			self.device.activeVideoMinFrameDuration = CMTimeMake(value: 1, timescale: 20) // 20 fps
+//            self.device.activeVideoMaxFrameDuration = CMTimeMake(value: 1, timescale: 60) // 20 fps
 			self.device.unlockForConfiguration()
 		} catch {
 			print("could not configure a device")
@@ -133,6 +154,16 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
 		
 		self.session.startRunning()
 	}
+    
+    func updateMemory(){
+        var t  = "EUR"
+        if let to = UserDefaults.standard.string(forKey: defaultsKeys.settingsTo) {
+            t = to
+        }
+        if let mem: Float = UserDefaults.standard.float(forKey: defaultsKeys.settingsCalcMemory) {
+                SumLabel.text = "Sum: \(mem) \(t)"
+        }
+    }
 	
 	override func didReceiveMemoryWarning() {
 		super.didReceiveMemoryWarning()
@@ -253,6 +284,7 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
                     var cnv = (((Float(outp) ?? 0) / 100) / Float(rates[frm] ?? 1) * Float(rates[t] ?? 1))
                     cnv = Float(round(100 * cnv) / 100)
                     let reg = Float(round(Float(outp) ?? 0) / 100)
+                    converted = cnv
 //                    self.label.text = "{\(useEINK ? "E-Ink" : "Reg")} \(reg) [\(frm)] -> \(cnv) [\(t)]"
                     self.label.text = "\(reg)[\(frm)] -> \(cnv)[\(t)]"
                 })

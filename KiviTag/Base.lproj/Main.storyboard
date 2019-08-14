@@ -12,33 +12,64 @@
         <!--Main-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController storyboardIdentifier="Camera" title="Main" id="vXZ-lx-hvc" customClass="ViewController" customModule="KiviTag" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Camera" title="Main" modalPresentationStyle="currentContext" id="vXZ-lx-hvc" customClass="ViewController" customModule="KiviTag" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
                     </layoutGuides>
                     <view key="view" contentMode="center" id="kh9-bI-dsS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iSt-CV-jMe">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iSt-CV-jMe">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <gestureRecognizers/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="[No tags scanned]" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eDX-M8-v75">
-                                <rect key="frame" x="0.0" y="64" width="375" height="29"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="[No tags scanned]" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eDX-M8-v75">
+                                <rect key="frame" x="0.0" y="64" width="320" height="34"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="34" id="ZBH-Rv-801"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
                                 <color key="textColor" red="0.15064915905366594" green="1" blue="0.16762013784166774" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sum: 0 RUB" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LmP-VS-Xs2">
+                                <rect key="frame" x="0.0" y="106" width="320" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                                <color key="textColor" red="0.15064915910000001" green="1" blue="0.16762013780000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O93-zD-0VN">
+                                <rect key="frame" x="92" y="491" width="44" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="MC"/>
+                                <connections>
+                                    <action selector="ClearMemory:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="2Cv-F4-M4Q"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oHx-1o-eqC">
+                                <rect key="frame" x="188" y="491" width="41" height="46"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <state key="normal" title="M+"/>
+                                <connections>
+                                    <action selector="PlusToMemory:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="Hwq-Lb-bOT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
-                            <constraint firstItem="iSt-CV-jMe" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="85L-Zx-X2A"/>
+                            <constraint firstItem="iSt-CV-jMe" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" constant="64" id="85L-Zx-X2A"/>
+                            <constraint firstItem="eDX-M8-v75" firstAttribute="trailing" secondItem="iSt-CV-jMe" secondAttribute="trailing" id="8j8-aX-jX0"/>
                             <constraint firstItem="iSt-CV-jMe" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="DaS-Rz-QUJ"/>
+                            <constraint firstItem="eDX-M8-v75" firstAttribute="leading" secondItem="iSt-CV-jMe" secondAttribute="leading" id="LKL-Lj-kH6"/>
+                            <constraint firstItem="eDX-M8-v75" firstAttribute="top" secondItem="iSt-CV-jMe" secondAttribute="top" id="h0E-dc-tk2"/>
                             <constraint firstAttribute="trailing" secondItem="iSt-CV-jMe" secondAttribute="trailing" id="oTM-Ss-fsz"/>
                             <constraint firstAttribute="bottom" secondItem="iSt-CV-jMe" secondAttribute="bottom" id="xGE-Hb-Wep"/>
                         </constraints>
@@ -60,7 +91,7 @@
                         <barButtonItem key="rightBarButtonItem" style="plain" id="CAB-BK-fIA">
                             <inset key="imageInsets" minX="0.0" minY="-3" maxX="0.0" maxY="0.0"/>
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="v7C-HA-dOA">
-                                <rect key="frame" x="276" y="7" width="83" height="30"/>
+                                <rect key="frame" x="221" y="7" width="83" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Settings"/>
                                 <connections>
@@ -69,8 +100,9 @@
                             </button>
                         </barButtonItem>
                     </navigationItem>
-                    <size key="freeformSize" width="375" height="667"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="SumLabel" destination="LmP-VS-Xs2" id="ntf-b7-0M4"/>
                         <outlet property="imageView" destination="iSt-CV-jMe" id="r2e-I9-uwq"/>
                         <outlet property="label" destination="eDX-M8-v75" id="EWJ-73-xG2"/>
                     </connections>
@@ -82,7 +114,7 @@
                     </connections>
                 </panGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3181" y="-2403"/>
+            <point key="canvasLocation" x="3180" y="-2404.2253521126759"/>
         </scene>
         <!--Settings-->
         <scene sceneID="2ZC-GH-2eI">
