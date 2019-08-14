@@ -20,6 +20,10 @@ Mat onlyNumbers;
 int check = 0;
 int len = 0;
 
+int size[] = {300, 150};
+
+
+
 std::vector<cv::Mat> outputs;
 
 double medianMat(cv::Mat Input) {
@@ -214,8 +218,6 @@ static Mat normalizeSobel(Mat grad){
     UIImageToMat(image, input);
     input.copyTo(output);
     
-    int size[] = {300, 150};
-    
     int w  = input.cols;
     int h = input.rows;
     
@@ -223,106 +225,121 @@ static Mat normalizeSobel(Mat grad){
     cv::Point crop_to   = cv::Point((int)(w/2 + size[0]/2), (int)(h/2 + size[1]/2));
     
     cv::Rect roi = cv::Rect(crop_from.x, crop_from.y, crop_to.x-crop_from.x, crop_to.y-crop_from.y);
-    
-    Mat cropped = Mat(input, roi);
-    
-    Mat gray, grad, display = input;
-    cv::Rect displayBox(0,0,0,0);
-    
-    cvtColor(cropped, gray, COLOR_BGR2GRAY);
-    bilateralFilter(gray, grad, 11, 17, 17);
-    Canny(grad, grad, 30, 200);
-    
-    std::vector<cv::Mat> contours;
-    findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-    
-    int maxArea = 0;
-    cvtColor(grad, grad, COLOR_GRAY2BGR);
-    
-    if(contours.size() > 0){
-        Mat biggest = contours[0];
-        for(int i = 0; i < contours.size(); i++){
-            cv::Rect box = boundingRect(contours[i]);
-            float area = box.width * box.height;
-            float asp = (float)box.height / (float)box.width;
-            if((asp >= 0.3 && asp <= 0.6) || (asp >= 0.87 && asp <= 1.2)){
-                if(area >= maxArea){
-                    maxArea = area;
-                    biggest = contours[i];
-                }
-            }
-        }
-        check = 1;
-        cv::Rect box = boundingRect(biggest);
-        display = Mat(cropped, box);
-        resize(display, display, cv::Size(300, 150));
-        outputs.clear();
-        outputs.push_back(display);
-        rectangle(cropped, cv::Point(box.x+1, box.y+1), cv::Point(box.x+box.width-1, box.y+box.height-1), cv::Scalar(0, 255, 0), 2);
-    }
-    
-    cvtColor(display, gray, COLOR_BGR2GRAY);
-    medianBlur(gray, gray, 3);
-    Mat krn = getStructuringElement(MORPH_RECT, cv::Size(3, 2));
-    Mat krn2 = getStructuringElement(MORPH_RECT, cv::Size(3, 2));
-    erode(gray, gray, krn2);
-    dilate(gray, gray, krn);
-    Canny(gray, grad, 30, 200);
-    
-    Mat mask(grad.rows, grad.cols, CV_8U, Scalar(0));
-    cropped = display;
-    bool edited = false;
-    bool shouldCrop = true;
-    
-    contours.clear();
-    outputs.clear();
-    findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-
-    std::sort(contours.begin(), contours.end(), compareContourArea);
-    std::sort(contours.begin(), contours.end(), compareContour);
-    
-    int n = 0;
-    Mat first(0, 0, CV_8U);
-    cv::Rect firstBox(0,0,0,0);
-    for(int i = 0; i < contours.size(); i++){
-        auto cnt = contours[i];
-        cv::Rect box = boundingRect(cnt);
-        auto area = box.width * box.height;
-        if(area > (shouldCrop ? 400 : 1000) && n <= 6){
-            float aspectRatio = (float)box.width / (float)box.height;
-            if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
-                int dst = dist(cv::Point(box.x+(int)(box.width / 2), box.y+(int)(box.height / 2)), cv::Point(firstBox.x+(int)(firstBox.width / 2), firstBox.y+(int)(firstBox.height / 2)));
-                if(checkConnections(cnt, contours, 2) && (first.rows == 0 || dst <= 100)){
-                    if(first.rows == 0){
-                        first = cnt;
-                        firstBox = boundingRect(first);
+    if(roi.width > 0 && roi.height > 0){
+        Mat cropped = Mat(input, roi);
+        
+        Mat gray, grad, display = input;
+        cv::Rect displayBox(0,0,0,0);
+        
+        cvtColor(cropped, gray, COLOR_BGR2GRAY);
+        bilateralFilter(gray, grad, 11, 17, 17);
+        Canny(grad, grad, 30, 200);
+        
+        std::vector<cv::Mat> contours;
+        findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+        
+        int maxArea = 0;
+        cvtColor(grad, grad, COLOR_GRAY2BGR);
+        
+        if(contours.size() > 0){
+            Mat biggest = contours[0];
+            for(int i = 0; i < contours.size(); i++){
+                cv::Rect box = boundingRect(contours[i]);
+                float area = box.width * box.height;
+                float asp = (float)box.height / (float)box.width;
+                if((asp >= 0.3 && asp <= 0.6) || (asp >= 0.87 && asp <= 1.2)){
+                    if(area >= maxArea){
+                        maxArea = area;
+                        biggest = contours[i];
                     }
+                }
+            }
+            check = 1;
+            cv::Rect box = boundingRect(biggest);
+            display = Mat(cropped, box);
+            resize(display, display, cv::Size(300, 150));
+            outputs.clear();
+            outputs.push_back(display);
+            
+            std::vector<cv::Point> hull;
+            cv::convexHull(biggest, hull);
+            double len = arcLength(hull, true);
+            double epsilon = 0.01*len;
+            std::vector<cv::Point> approx;
+            cv::approxPolyDP(hull, approx, epsilon, true);
+            if(approx.size() == 4){
+                cv::polylines(cropped, approx, true, cv::Scalar(0, 0, 255));
+                rectangle(cropped, cv::Point(box.x+1, box.y+1), cv::Point(box.x+box.width-1, box.y+box.height-1), cv::Scalar(0, 255, 0), 2);
+            }
+        }
+        
+        cvtColor(display, gray, COLOR_BGR2GRAY);
+        medianBlur(gray, gray, 3);
+        Mat krn = getStructuringElement(MORPH_RECT, cv::Size(3, 2));
+        Mat krn2 = getStructuringElement(MORPH_RECT, cv::Size(3, 2));
+        erode(gray, gray, krn2);
+        dilate(gray, gray, krn);
+        Canny(gray, grad, 30, 200);
+        
+        Mat mask(grad.rows, grad.cols, CV_8U, Scalar(0));
+        cropped = display;
+        bool edited = false;
+        bool shouldCrop = true;
+        
+        contours.clear();
+        outputs.clear();
+        findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+
+        std::sort(contours.begin(), contours.end(), compareContourArea);
+        std::sort(contours.begin(), contours.end(), compareContour);
+        
+        int n = 0;
+        Mat first(0, 0, CV_8U);
+        cv::Rect firstBox(0,0,0,0);
+        for(int i = 0; i < contours.size(); i++){
+            auto cnt = contours[i];
+            cv::Rect box = boundingRect(cnt);
+            auto area = box.width * box.height;
+            if(area > (shouldCrop ? 400 : 1000) && n <= 6){
+                float aspectRatio = (float)box.width / (float)box.height;
+                if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
+                    int dst = dist(cv::Point(box.x+(int)(box.width / 2), box.y+(int)(box.height / 2)), cv::Point(firstBox.x+(int)(firstBox.width / 2), firstBox.y+(int)(firstBox.height / 2)));
+    //                if(checkConnections(cnt, contours, 2) && (first.rows == 0 || dst <= 100)){
+    //                    if(first.rows == 0){
+    //                        first = cnt;
+    //                        firstBox = boundingRect(first);
+    //                    }
                     
-                    Mat normal = Mat(cropped, box);
-                    resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
+                        Mat normal = Mat(cropped, box);
+                        resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
                     
-                    cvtColor(normal, normal, COLOR_BGR2GRAY);
-                    GaussianBlur(normal, normal, cv::Size(5, 5), 0);
-                    threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
-                    int additionalPart = (28 - normal.cols) / 2;
-                    Mat delim(28, additionalPart, CV_8U, Scalar(255));
-                    hconcat(normal, delim, normal);
-                    hconcat(delim, normal, normal);
+                        cvtColor(normal, normal, COLOR_BGR2GRAY);
+                        GaussianBlur(normal, normal, cv::Size(5, 5), 0);
+                        threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
+                        int additionalPart = (28 - normal.cols) / 2;
+                        Mat delim(28, additionalPart, CV_8U, Scalar(255));
+                        hconcat(normal, delim, normal);
+                        hconcat(delim, normal, normal);
                     
-                    outputs.push_back(normal);
-                    edited = true;
-                    n++;
-                    len++;
+    //                    rectangle(display, cv::Point(box.x, box.y), cv::Point(box.x+box.width, box.y+box.height), colors[n]);
+                    drawContours(display, cnt, -1, cv::Scalar(0, 255, 255), 2);
+                        outputs.push_back(normal);
+                        edited = true;
+                        n++;
+                        len++;
+    //                }
                 }
             }
         }
-    }
 
-    rectangle(input, crop_from, crop_to, cv::Scalar(0, 255, 0), 1);
-    if(edited) {
-        onlyNumbers = mask;
-        check = 1;
+        rectangle(input, crop_from, crop_to, cv::Scalar(0, 255, 0), 1);
+        if(edited) {
+            onlyNumbers = mask;
+            check = 1;
+        }
     }
+//    Mat insert(input, roi);
+//    display.copyTo(insert);
     
     return MatToUIImage(input);
 }
@@ -365,11 +382,6 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
     
     input.copyTo(output);
     
-    int size[] = {300, 150};
-    int oldSize[] = {0, 0};
-    oldSize[0] = size[0];
-    oldSize[1] = size[1];
-    
     int w  = input.cols;
     int h = input.rows;
     
@@ -377,76 +389,90 @@ bool checkConnections(Mat suspect, std::vector<Mat> allContours, int minNearest 
     cv::Point crop_to   = cv::Point((int)(w/2 + size[0]/2), (int)(h/2 + size[1]/2));
     
     cv::Rect roi = cv::Rect(crop_from.x, crop_from.y, crop_to.x-crop_from.x, crop_to.y-crop_from.y);
+    if(roi.width > 0 && roi.height > 0){
+        Mat cropped = Mat(input, roi), origCropped = Mat(input, roi);
     
-    Mat cropped = Mat(input, roi), origCropped = Mat(input, roi);
+        outputs.clear();
     
-    outputs.clear();
-    
-    Mat gray;
-    cvtColor(cropped, gray, COLOR_BGR2GRAY);
-    
-    Mat grad;
-    
-    medianBlur(gray, gray, 3);
-    Mat krn = getStructuringElement(MORPH_RECT, cv::Size(2, 1));
-    Mat krn2 = getStructuringElement(MORPH_RECT, cv::Size(3, 1));
-    dilate(gray, gray, krn);
-    erode(gray, gray, krn2);
-    Canny(gray, grad, 30, 200);
-    
-    Mat mask(grad.rows, grad.cols, CV_8U, Scalar(0));
-    bool edited = false;
-    
-    std::vector<Mat> contours;
-    findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
-    
-    input = orig;
-    cropped = origCropped;
-    
-    std::sort(contours.begin(), contours.end(), compareContourArea);
-    std::sort(contours.begin(), contours.end(), compareContour);
-    
-    int n = 0;
-    for(int i = 0; i < contours.size(); i++){
-        auto cnt = contours[i];
-        cv::Rect box = boundingRect(cnt);
-        auto area = box.width * box.height;
-        if(area > 1000 && n <= 6){
-            float aspectRatio = (float)box.width / (float)box.height;
-            if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
-                if(checkConnections(cnt, contours, 2)){
-                Mat normal = Mat(cropped, box);
-                resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
+        Mat gray;
+        cvtColor(cropped, gray, COLOR_BGR2GRAY);
+        
+        Mat grad;
+        
+        medianBlur(gray, gray, 3);
+        Mat krn = getStructuringElement(MORPH_RECT, cv::Size(2, 1));
+        Mat krn2 = getStructuringElement(MORPH_RECT, cv::Size(3, 1));
+        dilate(gray, gray, krn);
+        erode(gray, gray, krn2);
+        Canny(gray, grad, 30, 200);
+        
+        Mat mask(grad.rows, grad.cols, CV_8U, Scalar(0));
+        bool edited = false;
+        
+        std::vector<Mat> contours;
+        findContours(grad, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE);
+        
+        input = orig;
+        cropped = origCropped;
+        
+        std::sort(contours.begin(), contours.end(), compareContourArea);
+        std::sort(contours.begin(), contours.end(), compareContour);
+        
+        int n = 0;
+        for(int i = 0; i < contours.size(); i++){
+            auto cnt = contours[i];
+            cv::Rect box = boundingRect(cnt);
+            auto area = box.width * box.height;
+            if(area > 1000 && n <= 6){
+                float aspectRatio = (float)box.width / (float)box.height;
+                if(aspectRatio >= 0.3 && aspectRatio <= 0.8){
+                    if(checkConnections(cnt, contours, 2)){
+                    Mat normal = Mat(cropped, box);
+                    resize(normal, normal, cv::Size(int(28*aspectRatio), 28));
 
-                cvtColor(normal, normal, COLOR_BGR2GRAY);
-                GaussianBlur(normal, normal, cv::Size(5, 5), 0);
-                threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
-                    
-                int additionalPart = (28 - normal.cols) / 2;
-                Mat delim(28, additionalPart, CV_8U, Scalar(255));
-                hconcat(normal, delim, normal);
-                hconcat(delim, normal, normal);
+                    cvtColor(normal, normal, COLOR_BGR2GRAY);
+                    GaussianBlur(normal, normal, cv::Size(5, 5), 0);
+                    threshold(normal, normal, 0, 255, THRESH_BINARY + THRESH_OTSU);
+                        
+                    int additionalPart = (28 - normal.cols) / 2;
+                    Mat delim(28, additionalPart, CV_8U, Scalar(255));
+                    hconcat(normal, delim, normal);
+                    hconcat(delim, normal, normal);
 
-                outputs.push_back(normal);
+                    outputs.push_back(normal);
 
-                rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
-                edited = true;
-                n++;
-                len++;
+                    rectangle(input, cv::Point(box.x+roi.x, box.y+roi.y), cv::Point(box.width+box.x+roi.x, box.height+box.y+roi.y), colors[n]);
+                    edited = true;
+                    n++;
+                    len++;
+                    }
                 }
             }
         }
-    }
-    cvtColor(grad, grad, COLOR_GRAY2BGR);
-    drawContours(grad, contours, -1, cv::Scalar(0, 255, 127), -1);
+        cvtColor(grad, grad, COLOR_GRAY2BGR);
+        drawContours(grad, contours, -1, cv::Scalar(0, 255, 127), -1);
 
-    rectangle(input, crop_from, crop_to, cv::Scalar(0, 0, 255), 1);
-    if(edited) {
-        onlyNumbers = mask;
-        check = 1;
+        rectangle(input, crop_from, crop_to, cv::Scalar(0, 0, 255), 1);
+        if(edited) {
+            onlyNumbers = mask;
+            check = 1;
+        }
     }
     
     return MatToUIImage(input);
+}
+
++(int)getROIWidth{
+    return size[0];
+}
+
++(int)getROIHeigh{
+    return size[1];
+}
+
++(void) setROI: (int)w hei:(int)h {
+    size[0] = w;
+    size[1] = h;
 }
 
 @end

@@ -57,8 +57,15 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
     
     var once = false
     
+    var sizeOfRect: CGPoint = CGPoint(x: 300, y: 150)
+    var center: CGPoint = CGPoint(x: 0, y: 0)
+    
+    var roiW: Int = 300
+    var roiH: Int = 150
+    
 	override func viewDidLoad() {
 		super.viewDidLoad()
+        
         
         let defaults = UserDefaults.standard
         defaultsKeys.rates = (defaults.dictionary(forKey: defaultsKeys.settingsRateDict) ?? [:]) as! [String: Double]
@@ -255,6 +262,8 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         // Show the result.
         DispatchQueue.main.async(execute: {
             self.imageView.image = resultImage
+            self.center =  CGPoint(x: self.imageView.frame.width/2, y: self.imageView.frame.height/2)
+
         })
 	}
     
@@ -319,6 +328,28 @@ class ViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDele
         }
         
         task.resume()
+    }
+    
+    var locationOfBeganTap: CGPoint = CGPoint(x: 0, y: 0)
+    var locationOfEndTap: CGPoint   = CGPoint(x: 0, y: 0)
+    @IBAction func panDetector(_ gesture: UIPanGestureRecognizer) {
+        let finger: CGPoint = gesture.location(in: self.view)
+        
+        if gesture.state == UIGestureRecognizer.State.began {
+            locationOfBeganTap = finger
+        } else if gesture.state == UIGestureRecognizer.State.ended {
+            locationOfEndTap = finger
+            if(distance(locationOfBeganTap, locationOfEndTap) >= 50){
+                locationOfBeganTap = finger
+                OpenCV.setROI(OpenCV.getROIWidth() == 300 ? 150 : 300, hei: 150)
+            }
+        }
+    }
+    
+    func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+        let xDist = a.x - b.x
+        let yDist = a.y - b.y
+        return CGFloat(sqrt(xDist * xDist + yDist * yDist))
     }
 }
 

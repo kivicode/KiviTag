@@ -16,4 +16,7 @@
 + (nonnull UIImage *)processEink:(UIImage *_Nonnull)image;
 + (int)shouldCheck;
 + (int)numberOfDigits;
++ (void)setROI:(int)w hei:(int)h;
++ (int)getROIWidth;
++ (int)getROIHeigh;
 @end

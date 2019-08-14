@@ -16,7 +16,6 @@
 		31A6B5F31B7ADBA4003C88EA /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31A6B5F21B7ADBA4003C88EA /* opencv2.framework */; };
 		31A6B5F41B7ADBA4003C88EA /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 31A6B5F21B7ADBA4003C88EA /* opencv2.framework */; };
 		31A6B5FD1B7ADFAE003C88EA /* OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */; };
-		31A6B5FE1B7ADFAE003C88EA /* OpenCV.mm in Sources */ = {isa = PBXBuildFile; fileRef = 31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */; };
 		ACAEB8CC22FCCE9A00C83C55 /* Dataset.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C522FCCE9900C83C55 /* Dataset.swift */; };
 		ACAEB8CD22FCCE9A00C83C55 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C622FCCE9900C83C55 /* Storage.swift */; };
 		ACAEB8CE22FCCE9A00C83C55 /* Structure.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8C722FCCE9900C83C55 /* Structure.swift */; };
@@ -26,6 +25,7 @@
 		ACAEB8D222FCCE9A00C83C55 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACAEB8CB22FCCE9A00C83C55 /* Error.swift */; };
 		ACD3E93122FE0830009B2073 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACD3E93022FE0830009B2073 /* SettingsViewController.swift */; };
 		ACFC11F822FCDF7700E49FE5 /* neuralnet-mnist-trained in Resources */ = {isa = PBXBuildFile; fileRef = ACFC11F722FCDF7700E49FE5 /* neuralnet-mnist-trained */; };
+		ACFF4F5F2303525F004B0EC6 /* CalculatorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACFF4F5E2303525F004B0EC6 /* CalculatorViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +62,7 @@
 		ACAEB8CB22FCCE9A00C83C55 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		ACD3E93022FE0830009B2073 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		ACFC11F722FCDF7700E49FE5 /* neuralnet-mnist-trained */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "neuralnet-mnist-trained"; sourceTree = "<group>"; };
+		ACFF4F5E2303525F004B0EC6 /* CalculatorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,22 +108,12 @@
 		31A6B5CF1B7ADB70003C88EA /* KiviTag */ = {
 			isa = PBXGroup;
 			children = (
-				ACAEB8CA22FCCE9A00C83C55 /* Activation.swift */,
-				ACAEB8C922FCCE9A00C83C55 /* Cache.swift */,
-				ACAEB8C522FCCE9900C83C55 /* Dataset.swift */,
-				ACAEB8CB22FCCE9A00C83C55 /* Error.swift */,
-				ACAEB8C822FCCE9A00C83C55 /* NeuralNet.swift */,
-				ACAEB8C622FCCE9900C83C55 /* Storage.swift */,
-				ACAEB8C722FCCE9900C83C55 /* Structure.swift */,
+				ACFF4F5D23035235004B0EC6 /* View Controllers */,
+				ACFF4F5C2303520F004B0EC6 /* Storyboards */,
+				ACFF4F5B230351E1004B0EC6 /* Open CV */,
+				ACFF4F5A230351CA004B0EC6 /* NN */,
 				31A6B5D21B7ADB70003C88EA /* AppDelegate.swift */,
-				31A6B5D41B7ADB70003C88EA /* ViewController.swift */,
-				ACD3E93022FE0830009B2073 /* SettingsViewController.swift */,
-				31A6B5F61B7ADEF4003C88EA /* KiviTag-Bridging-Header.h */,
-				31A6B5FB1B7ADFAE003C88EA /* OpenCV.h */,
-				31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */,
-				31A6B5D61B7ADB70003C88EA /* Main.storyboard */,
 				31A6B5D91B7ADB70003C88EA /* Images.xcassets */,
-				31A6B5DB1B7ADB70003C88EA /* LaunchScreen.xib */,
 				31A6B5D01B7ADB70003C88EA /* Supporting Files */,
 			);
 			path = KiviTag;
@@ -167,6 +158,49 @@
 				ACFC11F722FCDF7700E49FE5 /* neuralnet-mnist-trained */,
 			);
 			path = MNIST;
+			sourceTree = "<group>";
+		};
+		ACFF4F5A230351CA004B0EC6 /* NN */ = {
+			isa = PBXGroup;
+			children = (
+				ACAEB8CA22FCCE9A00C83C55 /* Activation.swift */,
+				ACAEB8C922FCCE9A00C83C55 /* Cache.swift */,
+				ACAEB8C522FCCE9900C83C55 /* Dataset.swift */,
+				ACAEB8CB22FCCE9A00C83C55 /* Error.swift */,
+				ACAEB8C822FCCE9A00C83C55 /* NeuralNet.swift */,
+				ACAEB8C622FCCE9900C83C55 /* Storage.swift */,
+				ACAEB8C722FCCE9900C83C55 /* Structure.swift */,
+			);
+			name = NN;
+			sourceTree = "<group>";
+		};
+		ACFF4F5B230351E1004B0EC6 /* Open CV */ = {
+			isa = PBXGroup;
+			children = (
+				31A6B5F61B7ADEF4003C88EA /* KiviTag-Bridging-Header.h */,
+				31A6B5FB1B7ADFAE003C88EA /* OpenCV.h */,
+				31A6B5FC1B7ADFAE003C88EA /* OpenCV.mm */,
+			);
+			name = "Open CV";
+			sourceTree = "<group>";
+		};
+		ACFF4F5C2303520F004B0EC6 /* Storyboards */ = {
+			isa = PBXGroup;
+			children = (
+				31A6B5D61B7ADB70003C88EA /* Main.storyboard */,
+				31A6B5DB1B7ADB70003C88EA /* LaunchScreen.xib */,
+			);
+			name = Storyboards;
+			sourceTree = "<group>";
+		};
+		ACFF4F5D23035235004B0EC6 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				31A6B5D41B7ADB70003C88EA /* ViewController.swift */,
+				ACD3E93022FE0830009B2073 /* SettingsViewController.swift */,
+				ACFF4F5E2303525F004B0EC6 /* CalculatorViewController.swift */,
+			);
+			name = "View Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -286,6 +320,7 @@
 				ACAEB8CE22FCCE9A00C83C55 /* Structure.swift in Sources */,
 				ACAEB8D122FCCE9A00C83C55 /* Activation.swift in Sources */,
 				ACAEB8D222FCCE9A00C83C55 /* Error.swift in Sources */,
+				ACFF4F5F2303525F004B0EC6 /* CalculatorViewController.swift in Sources */,
 				ACAEB8CF22FCCE9A00C83C55 /* NeuralNet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -294,7 +329,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				31A6B5FE1B7ADFAE003C88EA /* OpenCV.mm in Sources */,
 				31A6B5E91B7ADB70003C88EA /* KiviTagTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
